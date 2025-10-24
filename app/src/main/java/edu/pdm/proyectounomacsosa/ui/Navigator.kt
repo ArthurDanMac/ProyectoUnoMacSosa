@@ -14,7 +14,7 @@ import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 fun Navigator() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "inicio") {
-        composable("inicio") { RegisterScreen(viewModel(), { Unit },navController  ) }
+        composable("inicios") { RegisterScreen(viewModel(), { Unit },navController  ) }
 
     }
 }
