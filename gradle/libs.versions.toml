@@ -12,6 +12,8 @@ composeBom = "2024.09.00"
 room = "2.8.2"
 roomCommonJvm = "2.8.2"
 androidx-sqlite = "2.3.1"
+navigationCompose = "2.9.5"
+animation = "1.9.4"
 
 
 [libraries]
@@ -35,6 +37,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
 
 
 [plugins]
