@@ -22,5 +22,5 @@ interface TaskDao {
 
 
     @Query("DELETE FROM task WHERE id == :id  ")
-    suspend fun delete(id: Int): Task? // elimina tarea por el id
+    suspend fun delete(id: Int): Task // elimina tarea por el id
 }
