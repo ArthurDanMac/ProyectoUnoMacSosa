@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.Room
 import edu.pdm.proyectounomacsosa.model.AppDatabase
 import edu.pdm.proyectounomacsosa.model.TaskRepository
+import edu.pdm.proyectounomacsosa.ui.RegisterScreen
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 
@@ -26,7 +27,11 @@ class MainActivity : ComponentActivity() {
         val viewModel = TaskViewModel(repo)
         setContent {
             MaterialTheme {
-                RegisterScreen(viewModel)
+                RegisterScreen(
+                    viewModel,
+                    onSearch = TODO(),
+                    navController = TODO()
+                )
             }
         }
     }
