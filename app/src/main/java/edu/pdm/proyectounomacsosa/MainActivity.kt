@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.room.Room
 import edu.pdm.proyectounomacsosa.model.AppDatabase
 import edu.pdm.proyectounomacsosa.model.TaskRepository
@@ -29,8 +30,8 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 RegisterScreen(
                     viewModel,
-                    onSearch = TODO(),
-                    navController = TODO()
+                    onSearch = { Unit },
+                    navController = NavHostController(applicationContext)
                 )
             }
         }

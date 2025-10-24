@@ -9,6 +9,5 @@ class TaskRepository (private val dao: TaskDao){
 
     suspend fun getByName(name:String) = dao.getByName(name) //insertUser(user)
 
-    suspend fun delete(id:Int) = dao.delete(id) //insertUser(user)
 
 }
