@@ -42,6 +42,11 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
         }
     }
 
+    fun eraseTask(ID: Int){
+        viewModelScope.launch {
+            var num=repository.delete(ID)
+        }
 
+    }
 
 }
