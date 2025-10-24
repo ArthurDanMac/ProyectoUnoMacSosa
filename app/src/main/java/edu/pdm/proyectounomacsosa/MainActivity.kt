@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 RegisterScreen(
                     viewModel,
-                    onSearch = { Unit },
+                    onSearch = { Unit  },
                     navController = NavHostController(applicationContext)
                 )
             }
