@@ -21,6 +21,4 @@ interface TaskDao {
     suspend fun getByName(name: String): Task? //regresa tarea por nombre
 
 
-    @Query("DELETE FROM task WHERE id == :id  ")
-    suspend fun delete(id: Int): Task // elimina tarea por el id
 }
