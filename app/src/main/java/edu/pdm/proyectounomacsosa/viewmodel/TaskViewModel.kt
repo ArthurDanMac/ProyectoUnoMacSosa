@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     private val listaTasks = MutableStateFlow<List<Task>>(emptyList())
-    val users: StateFlow<List<Task>> get() = listaTasks
+    val tasks: StateFlow<List<Task>> get() = listaTasks
 
     private val taskUnica = MutableStateFlow<Task?>(null)
-    val selectedUser: StateFlow<Task?> get() = taskUnica
+    val selectedTask: StateFlow<Task?> get() = taskUnica
 
     fun loadTasks() {
         viewModelScope.launch {
