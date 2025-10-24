@@ -9,14 +9,18 @@ import androidx.room.Query
 interface TaskDao {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(task: Task)
+    suspend fun insert(task: Task) //insertar nueva task
 
     @Query("SELECT *FROM task")
-    suspend fun getAll():List<Task>?
+    suspend fun getAll():List<Task>? //da todas las tareas
 
-    @Query("SELECT * FROM task WHERE id = :id LIMIT 1 ")
-    suspend fun getById(id: Int): Task? // ? posiblidd de dar un resultado nulo
+    @Query("SELECT * FROM task WHERE id = :id ")
+    suspend fun getById(id: Int): Task? //regresa tarea por id
 
     @Query("SELECT * FROM task WHERE name like :name  ")
-    suspend fun getByName(name: String): Task?
+    suspend fun getByName(name: String): Task? //regresa tarea por nombre
+
+
+    @Query("DELETE FROM task WHERE id == :id  ")
+    suspend fun delete(id: Int): Task // elimina tarea por el id
 }
