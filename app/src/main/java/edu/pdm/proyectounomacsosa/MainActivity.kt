@@ -23,7 +23,7 @@ import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "users.db").build()
+        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "tasks.db").build()
         val repo = TaskRepository(db.task_dao())
         val viewModel = TaskViewModel(repo)
         setContent {
@@ -35,21 +35,5 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ProyectoUnoMacSosaTheme {
-        Greeting("Android")
     }
 }
