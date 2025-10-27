@@ -11,11 +11,21 @@ import edu.pdm.proyectounomacsosa.model.TaskRepository
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 
 @Composable
-fun Navigator() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "inicio") {
-        composable("inicios") { RegisterScreen(viewModel(), { Unit },navController  ) }
-
+fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
+    NavHost(navController, startDestination = "addTask") {
+        composable("addTask") {
+            AddTaskScreen(
+                viewModel = viewModel,
+                onSearch = { /* optional */ },
+                navController = navController
+            )
+        }
+        composable("seeTasks") {
+            RegisterScreen(
+                viewModel = viewModel,
+                onSearch = { /* optional */ },
+                navController = navController
+            )
+        }
     }
 }
-

@@ -13,9 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import edu.pdm.proyectounomacsosa.model.AppDatabase
 import edu.pdm.proyectounomacsosa.model.TaskRepository
+import edu.pdm.proyectounomacsosa.ui.AddTaskScreen
+import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.RegisterScreen
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
@@ -28,11 +31,10 @@ class MainActivity : ComponentActivity() {
         val viewModel = TaskViewModel(repo)
         setContent {
             MaterialTheme {
-                RegisterScreen(
-                    viewModel,
-                    onSearch = { Unit  },
-                    navController = NavHostController(applicationContext)
-                )
+                val navController = rememberNavController()
+                MaterialTheme {
+                    Navigator(viewModel = viewModel, navController = navController)
+                }
             }
         }
     }
