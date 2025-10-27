@@ -38,7 +38,7 @@ fun RegisterScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
             TopAppBar(
                 title = { Text("Task List") },
                 actions = {
-                            IconButton(onClick = { navController.navigate("addTask") }) {
+                            IconButton(onClick = { navController.navigate("listById") }) {
                                 Icon(Icons.Default.Search, null)
                             }
                 }
