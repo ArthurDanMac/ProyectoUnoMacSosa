@@ -64,7 +64,7 @@ fun ListByIdScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                 .padding(16.dp)
         ) {
             OutlinedTextField(
-                value = taskID,
+                value = "taskID",
                 onValueChange = { taskID = it },
                 label = { Text("Task ID") },
                 modifier = Modifier.fillMaxWidth(),
