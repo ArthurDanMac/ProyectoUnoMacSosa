@@ -32,11 +32,13 @@ import kotlin.properties.Delegates
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
+fun DeleteScreen(viewModel: TaskViewModel, navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
     var reloadKey by remember { mutableStateOf(0) }
     var id_=0
     var state by remember { mutableStateOf(false) }
+    var selectedId by remember { mutableStateOf<Int?>(null) }
+
 
     LaunchedEffect(reloadKey) { viewModel.loadTasks() }
 
@@ -63,26 +65,33 @@ fun DeleteScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
                     )
 
                     RadioButton(
-                        selected = state,
+                        selected = selectedId == tar.id,
                         onClick = {
-                            state = true
-                            tareas.map {
-                                id_=it.id
-                            }
-
+                            selectedId = tar.id
                         }
                     )
+
                     state=false
                 }
             }
         }
-        Button(
-            onClick = { reloadKey++ }
-        ) {
-            var VM=viewModel.eraseTask(id_)
-            viewModel.loadTasks()
-            Text("Borrar tarea")
-        }
-    }
 
+
+    }
+    Button(
+        /*onClick = {
+            viewModel.eraseTask(id_)
+            reloadKey++
+            navController.navigate("inicio")
+        }*/
+        onClick = {
+            selectedId?.let {
+                viewModel.eraseTask(it)
+                navController.navigate("delete")
+            }
+        }
+
+    ) {
+        Text("Borrar tarea")
+    }
 }

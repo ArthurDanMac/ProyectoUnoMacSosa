@@ -22,7 +22,6 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 DeleteScreen(
                     viewModel,
-                    onSearch = { Unit  },
                     navController = NavHostController(applicationContext)
                 )
             }
