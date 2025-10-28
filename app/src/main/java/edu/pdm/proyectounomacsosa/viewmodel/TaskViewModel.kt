@@ -13,7 +13,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     private val listaTasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks: StateFlow<List<Task>> get() = listaTasks
 
-    private val taskUnica = MutableStateFlow<Task?>(null)
+    val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
 
     fun loadTasks() {
