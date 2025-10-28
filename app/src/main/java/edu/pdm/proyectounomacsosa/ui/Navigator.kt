@@ -12,7 +12,7 @@ import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 
 @Composable
 fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
-    NavHost(navController, startDestination = "listById") {
+    NavHost(navController, startDestination = "delete") {
         composable("addTask") {
             AddTaskScreen(
                 viewModel = viewModel,
@@ -29,6 +29,13 @@ fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
         }
         composable("listById") {
             ListByIdScreen(
+                viewModel = viewModel,
+                onSearch = { /* optional */ },
+                navController = navController
+            )
+        }
+        composable("delete") {
+            DeleteScreen(
                 viewModel = viewModel,
                 onSearch = { /* optional */ },
                 navController = navController

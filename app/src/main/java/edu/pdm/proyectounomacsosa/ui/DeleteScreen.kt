@@ -1,6 +1,7 @@
 package edu.pdm.proyectounomacsosa.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,10 +33,10 @@ import kotlin.properties.Delegates
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteScreen(viewModel: TaskViewModel, navController: NavHostController) {
+fun DeleteScreen(viewModel: TaskViewModel,  onSearch: () -> Unit,navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
     var reloadKey by remember { mutableStateOf(0) }
-    var id_=0
+    var id_ = 0
     var state by remember { mutableStateOf(false) }
     var selectedId by remember { mutableStateOf<Int?>(null) }
 
@@ -44,54 +45,47 @@ fun DeleteScreen(viewModel: TaskViewModel, navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Listas de Tarea por Hacer") }
-            )
+            TopAppBar(title = { Text("Listas de Tarea por Hacer") })
         }
     ) { padding ->
-        LazyColumn(Modifier.selectableGroup()) {
-            items(tareas) { tar ->
-                Row (
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp,4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Text(
-                        text = tar.name,
-                        fontSize = 18.sp,
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-
-                    RadioButton(
-                        selected = selectedId == tar.id,
-                        onClick = {
-                            selectedId = tar.id
-                        }
-                    )
-
-                    state=false
+        Column(modifier = Modifier.padding(padding)) {
+            LazyColumn(Modifier.selectableGroup()) {
+                items(tareas) { tar ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp, 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = tar.name,
+                            fontSize = 18.sp,
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                        RadioButton(
+                            selected = selectedId == tar.id,
+                            onClick = { selectedId = tar.id }
+                        )
+                    }
                 }
             }
-        }
 
-
-    }
-    Button(
-        /*onClick = {
-            viewModel.eraseTask(id_)
-            reloadKey++
-            navController.navigate("inicio")
-        }*/
-        onClick = {
-            selectedId?.let {
-                viewModel.eraseTask(it)
-                navController.navigate("delete")
+            Button(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                enabled = selectedId != null,
+                onClick = {
+                    selectedId?.let {
+                        viewModel.eraseTask(it)
+                        reloadKey++ // Esto fuerza recarga
+                        navController.navigate("seeTasks")
+                    }
+                }
+            ) {
+                Text("Borrar tarea")
             }
         }
-
-    ) {
-        Text("Borrar tarea")
     }
 }

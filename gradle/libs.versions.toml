@@ -14,7 +14,6 @@ roomCommonJvm = "2.8.2"
 androidx-sqlite = "2.3.1"
 navigationCompose = "2.9.5"
 animation = "1.9.4"
-material3 = "1.4.0"
 
 
 [libraries]
@@ -40,11 +39,9 @@ room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
 androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
