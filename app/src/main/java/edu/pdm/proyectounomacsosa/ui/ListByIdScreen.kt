@@ -35,6 +35,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,9 +52,7 @@ fun ListByIdScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
             TopAppBar(
                 title = { Text("Task By ID List") },
                 actions = {
-                    IconButton(onClick = { navController.navigate("addTask") }) {
-                        Icon(Icons.Default.Search, null)
-                    }
+                    TopRightMenu(navController)
                 }
             )
         }

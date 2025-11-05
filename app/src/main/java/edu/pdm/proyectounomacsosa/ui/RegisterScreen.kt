@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 
 
@@ -36,11 +37,9 @@ fun RegisterScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Task List") },
+                title = { Text("Tasks List") },
                 actions = {
-                            IconButton(onClick = { navController.navigate("listById") }) {
-                                Icon(Icons.Default.Search, null)
-                            }
+                    TopRightMenu(navController)
                 }
             )
         }

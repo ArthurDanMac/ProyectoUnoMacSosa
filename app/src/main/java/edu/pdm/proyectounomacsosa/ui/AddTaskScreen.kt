@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.Task
+import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 import java.util.Calendar
 
@@ -88,11 +89,10 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add a task") },
+                title = { Text("Add Task") },
                 actions = {
-
-                }
-            )
+                    TopRightMenu(navController)
+                }            )
         }
     ) { padding ->
         Column(
