@@ -30,7 +30,7 @@ fun RegisterScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
             TopAppBar(
                 title = { Text("Tasks List") },
                 actions = {
-                    TopRightMenu(navController)
+                    TopRightMenu(navController, "Tasks List")
                 }
             )
         }

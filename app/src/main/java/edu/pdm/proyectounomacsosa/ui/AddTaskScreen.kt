@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -46,37 +47,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-/*
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
-    val tareas by viewModel.tasks.collectAsState()
-
-    LaunchedEffect(Unit) { viewModel.loadTasks() }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Add a task") },
-                actions = {
-
-                }
-            )
-        }
-    ) { padding ->
-        LazyColumn(Modifier.padding(padding)) {
-            items(tareas) { tarea ->
-                ListItem(
-                    { Text(tarea.name) }
-                )
-            }
-        }
-    }
-}
-*/
-
-
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,7 +69,7 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
             TopAppBar(
                 title = { Text("Add Task") },
                 actions = {
-                    TopRightMenu(navController)
+                    TopRightMenu(navController, "Add Task")
                 }            )
         }
     ) { padding ->
@@ -173,6 +143,7 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                     }
                 )
             }
+            Spacer(modifier = Modifier.height(50.dp)) // pushes button down
             Button(
                 onClick = {
                     if (taskName.isNotBlank() && dueDate.isNotBlank()) {
@@ -182,23 +153,21 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                             status = false // defaulting new tasks to incomplete
                         )
                         viewModel.addTask(newTask)
+
                         taskName = ""
                         dueDate = ""
                     }
                 },
-                modifier = Modifier.align(Alignment.End)
+                modifier =
+                    Modifier.align(Alignment.CenterHorizontally)
+                        .width(200.dp)                        // button width
+                        .height(50.dp)
+                        .fillMaxWidth(0.5f)  // 50% of the column width
+                        .height(50.dp)
+
+
             ) {
                 Text("Add Task")
-            }
-
-            Button(
-                onClick = {
-                    navController.navigate("seeTasks")
-                },
-                modifier = Modifier.align(Alignment.End)
-
-            ) {
-                Text("Go to Another Screen")
             }
 
 

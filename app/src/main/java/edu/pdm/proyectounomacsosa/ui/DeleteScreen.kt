@@ -49,7 +49,7 @@ fun DeleteScreen(viewModel: TaskViewModel,  onSearch: () -> Unit,navController: 
             TopAppBar(
                 title = { Text("Delete Tasks") },
                 actions = {
-                    TopRightMenu(navController)
+                    TopRightMenu(navController, "Delete Tasks")
                 }
             )
         }

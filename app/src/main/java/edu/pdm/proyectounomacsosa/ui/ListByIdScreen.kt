@@ -52,7 +52,7 @@ fun ListByIdScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
             TopAppBar(
                 title = { Text("Task By ID List") },
                 actions = {
-                    TopRightMenu(navController)
+                    TopRightMenu(navController, "Task by ID List")
                 }
             )
         }

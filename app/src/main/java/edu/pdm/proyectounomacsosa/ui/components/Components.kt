@@ -1,7 +1,9 @@
 package edu.pdm.proyectounomacsosa.ui.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -16,20 +18,40 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 
 @Composable
-fun TopRightMenu(navController: NavHostController) {
+fun TopRightMenu(navController: NavHostController, screenName: String) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = screenName,
+            fontSize = 24.sp,
+            fontFamily = FontFamily.Monospace,       // choose any font family
+            fontWeight = FontWeight.Bold,        // bold
+            fontStyle = FontStyle.Normal,        // normal, italic, etc
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 16.dp)           // optional spacing from top
+        )
         // Este Box envuelve el botón y lo alinea arriba a la derecha
         Box(modifier = Modifier.align(Alignment.TopEnd)) {
-            IconButton(onClick = { expanded = true }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Menú")
+            // Title text next to the menu
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
+
+                IconButton(onClick = { expanded = true }) {
+                    Icon(Icons.Default.MoreVert, contentDescription = "Menú")
+                }
             }
 
             DropdownMenu(
