@@ -2,23 +2,55 @@ package edu.pdm.proyectounomacsosa.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import edu.pdm.proyectounomacsosa.apiclient.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.model.TaskRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.collections.plus
 
 class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
+    data class UiState(
+        val isLoading: Boolean = false,
+        val message: String = "Presiona el botón"
+    )
 
     private val listaTasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks: StateFlow<List<Task>> get() = listaTasks
 
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState
+
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
-
+    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjI0OTM0OTYsImV4cCI6MTc2MjQ5NzA5Nn0.dn_2WddT3ALRTH40IIo4xsLRRZN90h1IvpY8t9kG43Y"
     fun loadTasks() {
         viewModelScope.launch {
-            listaTasks.value = repository.getAll()!!
+            //listaTasks.value = repository.getAll()!!
+            println("Entra a load tasks")
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+           // var result = withContext(Dispatchers.IO) {
+
+                try {
+                    println("Entra al try")
+                    val result2 = RetrofitClient.api.getTasks(token)
+                    listaTasks.value = result2
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    println("Error: $e")
+                }
+
+            //}
+
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
+
+            println("Sale de load tasks")
+
         }
     }
 
@@ -37,8 +69,17 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     fun addTask(task: Task) {
         viewModelScope.launch {
-            repository.insert(task)
-            loadTasks()
+//            repository.insert(task)
+//            loadTasks()
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+            try {
+                val newTask = RetrofitClient.api.createTask(token, task)
+                listaTasks.value = listaTasks.value + newTask
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
+
         }
     }
 

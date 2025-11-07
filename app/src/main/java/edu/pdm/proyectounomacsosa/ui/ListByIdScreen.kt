@@ -89,9 +89,19 @@ fun ListByIdScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                         headlineContent = { Text(t.name) },
                         supportingContent = { Text(t.plannedD) } // or format it nicely
                     )
+                    var estado: Boolean
+                    if(t.status==0){
+                        println("Incomplete")
+                        estado=false
+                    }
+                    else{
+                        println("Complete")
+                        estado=true
+                    }
+
                     Checkbox(
-                        checked = checkedState.value,
-                        onCheckedChange = { checkedState.value = it }
+                        checked = estado,
+                        onCheckedChange = { checkedState.value = t.status }
                     )
                     Spacer(modifier = Modifier.width(8.dp)) // small space between checkbox and text
 
