@@ -31,16 +31,16 @@ import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 import kotlin.properties.Delegates
+import androidx.compose.material3.Checkbox
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteScreen(viewModel: TaskViewModel,  onSearch: () -> Unit,navController: NavHostController) {
+fun DeleteScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
     var reloadKey by remember { mutableStateOf(0) }
-    var id_ = 0
-    var state by remember { mutableStateOf(false) }
-    var selectedId by remember { mutableStateOf<Int?>(null) }
 
+    // Track multiple selections
+    var selectedIds by remember { mutableStateOf(setOf<Int>()) }
 
     LaunchedEffect(reloadKey) { viewModel.loadTasks() }
 
@@ -48,14 +48,12 @@ fun DeleteScreen(viewModel: TaskViewModel,  onSearch: () -> Unit,navController: 
         topBar = {
             TopAppBar(
                 title = { Text("Delete Tasks") },
-                actions = {
-                    TopRightMenu(navController, "Delete Tasks")
-                }
+                actions = { TopRightMenu(navController, "Delete Tasks") }
             )
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            LazyColumn(Modifier.selectableGroup()) {
+            LazyColumn {
                 items(tareas) { tar ->
                     Row(
                         modifier = Modifier
@@ -69,9 +67,18 @@ fun DeleteScreen(viewModel: TaskViewModel,  onSearch: () -> Unit,navController: 
                             fontSize = 18.sp,
                             style = MaterialTheme.typography.bodyLarge,
                         )
-                        RadioButton(
-                            selected = selectedId == tar.id,
-                            onClick = { selectedId = tar.id }
+
+                        // Use Checkbox instead of RadioButton
+                        val isSelected = tar.id in selectedIds
+                        Checkbox(
+                            checked = isSelected,
+                            onCheckedChange = { checked ->
+                                selectedIds = if (checked) {
+                                    selectedIds + tar.id
+                                } else {
+                                    selectedIds - tar.id
+                                }
+                            }
                         )
                     }
                 }
@@ -81,16 +88,17 @@ fun DeleteScreen(viewModel: TaskViewModel,  onSearch: () -> Unit,navController: 
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
-                enabled = selectedId != null,
+                enabled = selectedIds.isNotEmpty(),
                 onClick = {
-                    selectedId?.let {
-                        viewModel.eraseTask(it)
-                        reloadKey++ // Esto fuerza recarga
-                        navController.navigate("seeTasks")
+                    selectedIds.forEach { id ->
+                        viewModel.eraseTask(id)
                     }
+                    selectedIds = emptySet()
+                    reloadKey++ // force reload
+                    navController.navigate("seeTasks")
                 }
             ) {
-                Text("Borrar tarea")
+                Text("Borrar tareas seleccionadas")
             }
         }
     }
