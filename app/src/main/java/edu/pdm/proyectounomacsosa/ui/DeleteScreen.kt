@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.Task
+import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 import kotlin.properties.Delegates
 
@@ -45,7 +46,12 @@ fun DeleteScreen(viewModel: TaskViewModel,  onSearch: () -> Unit,navController: 
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Listas de Tarea por Hacer") })
+            TopAppBar(
+                title = { Text("Delete Tasks") },
+                actions = {
+                    TopRightMenu(navController)
+                }
+            )
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {

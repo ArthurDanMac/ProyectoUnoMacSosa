@@ -1,0 +1,15 @@
+drop database if exists Tasks;
+create database Tasks;
+use Tasks;
+create table Task(
+	id int auto_increment primary key,
+    name nvarchar(100),
+    status boolean,
+    deadline date
+);
+
+
+insert into Task (name,status,deadline) values	('tarea1',false,'2025-10-29'),
+	('tarea2',false,'2025-10-30'),
+	('tarea3',false,'2025-10-31');
+select *from Task;
