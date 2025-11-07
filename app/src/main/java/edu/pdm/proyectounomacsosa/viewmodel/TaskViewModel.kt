@@ -28,7 +28,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
-    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjI1MzE2MjQsImV4cCI6MTc2MjUzNTIyNH0.lGgB3hQWePV7OPtHE38amG_0EzIKBiOlJ-L4NTuC_O4"
+    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjI1MzY1MjQsImV4cCI6MTc2MjU0MDEyNH0.i-NlhOe1b6Etaov_-ZC9YR6j2n8bnVs8MXiJTLmAvbw"
     fun loadTasks() {
         viewModelScope.launch {
             //listaTasks.value = repository.getAll()!!
@@ -72,6 +72,10 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 //            repository.insert(task)
 //            loadTasks()
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+            println("Entra a add task")
+            println("nombre ${task.name}")
+            println("fecha ${task.plannedD}")
+            println("estado ${task.status}")
             try {
                 val newTask = RetrofitClient.api.createTask(token, task)
                 listaTasks.value = listaTasks.value + newTask
