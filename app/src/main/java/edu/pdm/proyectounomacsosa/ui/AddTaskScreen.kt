@@ -150,7 +150,7 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                         val newTask = Task(
                             name = taskName,
                             plannedD = dueDate,
-                            status = 0 // defaulting new tasks to incomplete
+                            status = 0// defaulting new tasks to incomplete
                         )
                         viewModel.addTask(newTask)
 
