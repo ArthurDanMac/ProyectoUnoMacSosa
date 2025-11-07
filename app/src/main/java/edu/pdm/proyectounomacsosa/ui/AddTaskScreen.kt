@@ -1,6 +1,9 @@
 package edu.pdm.proyectounomacsosa.ui
 
 import android.app.DatePickerDialog
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 //import androidx.compose.foundation.lazy.items
 //import androidx.compose.material.icons.Icons
 //import androidx.compose.material.icons.filled.AccountCircle
@@ -38,6 +42,8 @@ import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 /*
@@ -72,6 +78,7 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
@@ -83,6 +90,7 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
     var taskName by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
+    var showErrorDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) { viewModel.loadTasks() }
 
@@ -132,11 +140,38 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                     { _, year, month, dayOfMonth ->
                         dueDate = "$year-${month + 1}-$dayOfMonth" // Store as string
                         showDatePicker = false
+
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+                        val selectedDate = LocalDate.parse(dueDate, formatter)
+                        val today = LocalDate.now()
+
+                        if (selectedDate.isBefore(today)) {
+                            println("Fecha La fecha es anterior a hoy")
+                            dueDate = ""
+                            showErrorDialog = true
+                        }
+                        if (selectedDate.isEqual(today) || selectedDate.isAfter(today)) {
+                            println("Fecha La fecha es posterior a hoy")
+                        }
+
+
                     },
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)
                 ).show()
+            }
+            if (showErrorDialog) {
+                AlertDialog(
+                    onDismissRequest = { showErrorDialog = false },
+                    title = { Text("Error de Fecha") },
+                    text = { Text("No puedes seleccionar una fecha anterior a la de hoy.") },
+                    confirmButton = {
+                        Button(onClick = { showErrorDialog = false }) {
+                            Text("Aceptar")
+                        }
+                    }
+                )
             }
             Button(
                 onClick = {
