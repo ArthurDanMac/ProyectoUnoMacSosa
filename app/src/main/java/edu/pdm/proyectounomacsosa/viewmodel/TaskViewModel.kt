@@ -28,7 +28,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
-    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjI1MzY1MjQsImV4cCI6MTc2MjU0MDEyNH0.i-NlhOe1b6Etaov_-ZC9YR6j2n8bnVs8MXiJTLmAvbw"
+    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjI1NjY0NjYsImV4cCI6MTc2MjU3MDA2Nn0.sQF1_qttqowhkw3dzsCTcNsurOQ-5WRULbcO34zGuzg"
     fun loadTasks() {
         viewModelScope.launch {
             //listaTasks.value = repository.getAll()!!
