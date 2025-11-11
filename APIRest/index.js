@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 const app = express();
+module.exports = app;
 
 app.use(express.json());
 app.use("/api/tasks", taskRoutes);
@@ -12,7 +13,6 @@ app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => res.send("API Tasks funcionando ✅"));
 
-module.exports = app;
 
 /*
 const PORT = process.env.PORT || 3000;
