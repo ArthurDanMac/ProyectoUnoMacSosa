@@ -12,7 +12,7 @@ app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => res.send("API Tasks funcionando ✅"));
 
-module.exports = app;
+//module.exports = app;
 
 /*
 const PORT = process.env.PORT || 3000;
