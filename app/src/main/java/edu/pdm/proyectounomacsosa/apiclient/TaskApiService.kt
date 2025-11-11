@@ -16,4 +16,15 @@ interface TaskApiService {
         @Header("Authorization") token: String,
         @Body task: Task
     ): Task
+
+
+    data class LoginRequest(
+        val name: String,
+        val pass: String
+    )
+
+    @POST("/api/auth/login")
+    suspend fun login(
+        @Body req: LoginRequest
+    ):String
 }
