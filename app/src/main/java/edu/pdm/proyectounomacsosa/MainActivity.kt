@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         ).build()
         val repo = TaskRepository(db.task_dao())
         val viewModel = TaskViewModel(repo)
-
+        viewModel.login("root","password")
         setContent {
             // Use your custom dark theme
             ProyectoUnoMacSosaTheme(darkTheme = true) {

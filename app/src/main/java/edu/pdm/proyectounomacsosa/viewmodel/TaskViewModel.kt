@@ -3,6 +3,7 @@ package edu.pdm.proyectounomacsosa.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.pdm.proyectounomacsosa.apiclient.RetrofitClient
+import edu.pdm.proyectounomacsosa.apiclient.TaskApiService
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.model.TaskRepository
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +30,29 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
     private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjI1NjY0NjYsImV4cCI6MTc2MjU3MDA2Nn0.sQF1_qttqowhkw3dzsCTcNsurOQ-5WRULbcO34zGuzg"
+
+    fun login(user: String, password: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+                try {
+                    println("Entra al try de login")
+                    val login= TaskApiService.LoginRequest(
+                        name = user,
+                        pass = password
+                    )
+                    println("login:")
+                    println(login.name)
+                    println(login.pass)
+                    val result = RetrofitClient.api.login( login)
+                    println("result:")
+                    println(result)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    println("Error: $e")
+                }
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
+        }
+    }
     fun loadTasks() {
         viewModelScope.launch {
             //listaTasks.value = repository.getAll()!!
