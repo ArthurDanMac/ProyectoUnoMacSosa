@@ -10,11 +10,9 @@ app.use(express.json());
 app.use("/api/tasks", taskRoutes);
 app.use("/api/auth", authRoutes);
 
-app.get("/", (req, res) => res.send("API Tasks funcionando ✅"));
+app.get( "/", (req, res) => res.send("API Tasks funcionando ✅") );
 
 //module.exports = app;
 
-/*
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
-*/
