@@ -1,5 +1,8 @@
 package edu.pdm.proyectounomacsosa.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.pdm.proyectounomacsosa.apiclient.RetrofitClient
@@ -13,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.InetAddress
 import kotlin.collections.plus
 
 class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
@@ -29,7 +33,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
-    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjI1NjY0NjYsImV4cCI6MTc2MjU3MDA2Nn0.sQF1_qttqowhkw3dzsCTcNsurOQ-5WRULbcO34zGuzg"
+    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjMwMDQxNjQsImV4cCI6MTc2MzAwNzc2NH0.zva_gSO7pIOoKDXb7yVvfcRUb7huAfnOfQjsF4NcpFw"
 
     fun login(user: String, password: String) {
         viewModelScope.launch {
@@ -116,6 +120,24 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             var num=repository.delete(ID)
         }
 
+    }
+
+
+    var resolvedIp by mutableStateOf<String?>(null)
+        private set
+
+    fun resolveDomain() {
+        val domain="https://proyecto-uno-mac-sosa.vercel.app/api/tasks"
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val ip = InetAddress.getByName(domain).hostAddress
+                resolvedIp = ip
+                println( "Resolved IP: $ip")
+            } catch (e: Exception) {
+                resolvedIp = "Error: ${e.message}"
+                println( "Resolution failed: ${e.message}")
+            }
+        }
     }
 
 }

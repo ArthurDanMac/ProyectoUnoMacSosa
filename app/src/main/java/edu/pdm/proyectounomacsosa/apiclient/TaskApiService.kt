@@ -23,7 +23,7 @@ interface TaskApiService {
         val pass: String
     )
 
-    @POST("/api/auth/login")
+    @POST(".")
     suspend fun login(
         @Body req: LoginRequest
     ):String
