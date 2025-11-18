@@ -11,20 +11,30 @@ interface TaskApiService {
         @Header("Authorization") token: String
     ): List<Task>
 
+    @GET("{id}")
+    suspend fun getTaskById(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Task
+
     @POST(".")
     suspend fun createTask(
         @Header("Authorization") token: String,
         @Body task: Task
     ): Task
 
+    @PUT("{id}")
+    suspend fun updateTask(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body task: Task
+    ): Task
 
-    data class LoginRequest(
-        val name: String,
-        val pass: String
+    @DELETE("{id}")
+    suspend fun deleteTask(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
     )
 
-    @POST(".")
-    suspend fun login(
-        @Body req: LoginRequest
-    ):String
+
 }

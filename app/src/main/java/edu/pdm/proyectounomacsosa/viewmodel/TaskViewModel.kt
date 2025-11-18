@@ -35,35 +35,11 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     val selectedTask: StateFlow<Task?> get() = taskUnica
     private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjMwNTE1MTYsImV4cCI6MTc5NDYwOTExNn0.y5q1uYHElp6-kMHNnMSRXaew1qPuvyvKmAJvZrYV3k0"
 
-    fun login(user: String, password: String) {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
-                try {
-                    println("Entra al try de login")
-                    val login= TaskApiService.LoginRequest(
-                        name = user,
-                        pass = password
-                    )
-                    println("login:")
-                    println(login.name)
-                    println(login.pass)
-                    val result = RetrofitClient.api.login( login)
-                    println("result:")
-                    println(result)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    println("Error: $e")
-                }
-            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
-        }
-    }
+
     fun loadTasks() {
         viewModelScope.launch {
-            //listaTasks.value = repository.getAll()!!
             println("Entra a load tasks")
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
-           // var result = withContext(Dispatchers.IO) {
-
                 try {
                     println("Entra al try")
                     val result2 = RetrofitClient.api.getTasks(token)
@@ -72,20 +48,26 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
                     e.printStackTrace()
                     println("Error: $e")
                 }
-
-            //}
-
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
-
             println("Sale de load tasks")
-
         }
     }
 
 
     fun findTaskById(ID: Int) {
         viewModelScope.launch {
-            taskUnica.value = repository.getById(ID)
+            //taskUnica.value = repository.getById(ID)
+            println("Entra a load tasks")
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+            try {
+                println("Entra al try")
+                taskUnica.value = RetrofitClient.api.getTaskById(token,ID)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                println("Error: $e")
+            }
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
+            println("Sale de load tasks")
         }
     }
 
@@ -97,8 +79,6 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     fun addTask(task: Task) {
         viewModelScope.launch {
-//            repository.insert(task)
-//            loadTasks()
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             println("Entra a add task")
             println("nombre ${task.name}")
@@ -111,15 +91,18 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
                 e.printStackTrace()
             }
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
-
         }
     }
 
     fun eraseTask(ID: Int){
         viewModelScope.launch {
-            var num=repository.delete(ID)
-        }
-
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+            try {
+                val oldTask = RetrofitClient.api.deleteTask(token,ID)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }        }
     }
 
 

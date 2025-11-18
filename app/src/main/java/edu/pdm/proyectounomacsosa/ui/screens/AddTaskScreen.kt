@@ -153,6 +153,7 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
 
                         taskName = ""
                         dueDate = ""
+                        navController.navigate("seeTasks")
                     }
                 },
                 modifier =
