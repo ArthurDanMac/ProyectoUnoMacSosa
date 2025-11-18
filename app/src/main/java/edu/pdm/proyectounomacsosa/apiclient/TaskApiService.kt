@@ -28,7 +28,7 @@ interface TaskApiService {
         @Header("Authorization") token: String,
         @Path("id") id: Int,
         @Body task: Task
-    ): Task
+    )
 
     @DELETE("{id}")
     suspend fun deleteTask(

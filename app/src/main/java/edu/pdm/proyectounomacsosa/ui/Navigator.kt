@@ -1,5 +1,7 @@
 package edu.pdm.proyectounomacsosa.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -7,9 +9,11 @@ import androidx.navigation.compose.composable
 import edu.pdm.proyectounomacsosa.ui.screens.AddTaskScreen
 import edu.pdm.proyectounomacsosa.ui.screens.DeleteScreen
 import edu.pdm.proyectounomacsosa.ui.screens.ListByIdScreen
-import edu.pdm.proyectounomacsosa.ui.screens.RegisterScreen
+import edu.pdm.proyectounomacsosa.ui.screens.TaskListScreen
+import edu.pdm.proyectounomacsosa.ui.screens.UpdateScreen
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
     NavHost(navController, startDestination = "seeTasks") {
@@ -21,7 +25,7 @@ fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
             )
         }
         composable("seeTasks") {
-            RegisterScreen(
+            TaskListScreen(
                 viewModel = viewModel,
                 onSearch = { /* optional */ },
                 navController = navController
@@ -36,6 +40,13 @@ fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
         }
         composable("delete") {
             DeleteScreen(
+                viewModel = viewModel,
+                onSearch = { /* optional */ },
+                navController = navController
+            )
+        }
+        composable("update") {
+            UpdateScreen(
                 viewModel = viewModel,
                 onSearch = { /* optional */ },
                 navController = navController

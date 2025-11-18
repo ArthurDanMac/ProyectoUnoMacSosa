@@ -25,6 +25,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
         val message: String = "Presiona el botón"
     )
 
+    var idUpVM=0
     private val listaTasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks: StateFlow<List<Task>> get() = listaTasks
 
@@ -120,6 +121,22 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
                 resolvedIp = "Error: ${e.message}"
                 println( "Resolution failed: ${e.message}")
             }
+        }
+    }
+    fun updateTask(task: Task) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+            println("Entra a add task")
+            println("nombre ${task.name}")
+            println("fecha ${task.plannedD}")
+            println("estado ${task.status}")
+            try {
+                val newTask = RetrofitClient.api.updateTask(token,idUpVM, task)
+                //listaTasks.value = listaTasks.value + newTask
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
         }
     }
 
