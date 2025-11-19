@@ -25,14 +25,17 @@ import java.time.temporal.ChronoUnit
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
+fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
 
     LaunchedEffect(Unit) { viewModel.loadTasks() }
@@ -68,6 +71,12 @@ fun RegisterScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                                 fontSize = 14.sp,
                                 color = Color(0xFF808080)
                             )
+                            Button(
+                                onClick = {
+                                    viewModel.idUpVM=tarea.id
+                                    navController.navigate("update")
+                                }
+                            ) { Text("Edit")}
                         }
                     }
                 )

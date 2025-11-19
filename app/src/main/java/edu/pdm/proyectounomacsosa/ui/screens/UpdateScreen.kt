@@ -48,23 +48,30 @@ import java.util.Calendar
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
+fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
-
-
 
     // Form state
     var taskName by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf("") }
+    var status by remember { mutableStateOf(0) }
     var showDatePicker by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
 
+    var idUpd=viewModel.idUpVM
+
     LaunchedEffect(Unit) { viewModel.loadTasks() }
+    LaunchedEffect(idUpd) {
+        taskName=tareas[idUpd-1].name
+        dueDate=tareas[idUpd-1].plannedD
+        status=tareas[idUpd-1].status
+    }
+
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Task") },
+                title = { Text("Update Task") },
                 actions = {
                     TopRightMenu(navController, "Add Task")
                 }            )
@@ -144,15 +151,16 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
             Button(
                 onClick = {
                     if (taskName.isNotBlank() && dueDate.isNotBlank()) {
-                        val newTask = Task(
+                        val TaskUPD = Task(
                             name = taskName,
                             plannedD = dueDate,
-                            status = 0// defaulting new tasks to incomplete
+                            status = status// defaulting new tasks to incomplete
                         )
-                        viewModel.addTask(newTask)
+                        viewModel.updateTask(TaskUPD)
 
                         taskName = ""
                         dueDate = ""
+                        status=0
                         navController.navigate("seeTasks")
                     }
                 },

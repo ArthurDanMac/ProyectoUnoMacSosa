@@ -29,6 +29,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.TextField
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,3 +113,50 @@ fun ListByIdScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
         }
 
     }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ComboBoxExample() {
+    // Lista de opciones
+    val options = listOf("Opción 1", "Opción 2", "Opción 3")
+
+    // Estado del texto seleccionado
+    var selectedText by remember { mutableStateOf("") }
+
+    // Estado de expansión del menú
+    var expanded by remember { mutableStateOf(false) }
+
+    // Caja que combina TextField y menú desplegable
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        // Campo de texto de solo lectura
+        TextField(
+            value = selectedText,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text("Selecciona una opción") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+            modifier = Modifier
+                .menuAnchor() // Necesario para posicionar el menú
+                .fillMaxWidth()
+        )
+
+        // Menú desplegable
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        selectedText = option
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
