@@ -1,8 +1,10 @@
 package edu.pdm.proyectounomacsosa
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import edu.pdm.proyectounomacsosa.model.AppDatabase
@@ -12,6 +14,7 @@ import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
 import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)

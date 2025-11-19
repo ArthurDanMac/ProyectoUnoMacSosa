@@ -26,17 +26,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import edu.pdm.proyectounomacsosa.model.Task
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
+    var estadoInt by remember { mutableStateOf(0) }
+
 
     LaunchedEffect(Unit) { viewModel.loadTasks() }
 
@@ -70,6 +78,20 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                                 "($daysLeft days left)",
                                 fontSize = 14.sp,
                                 color = Color(0xFF808080)
+                            )
+                            val estado = remember { mutableStateOf(tarea.status == 1) }
+                            Checkbox(
+                                checked = estado.value,
+                                onCheckedChange = { checked ->
+                                    estado.value = checked
+                                    viewModel.idUpVM=tarea.id
+                                    val taskState = Task(
+                                        name = tarea.name,
+                                        plannedD = tarea.plannedD,
+                                        status = if (checked) 1 else 0
+                                    )
+                                    viewModel.updateTask(taskState)
+                                }
                             )
                             Button(
                                 onClick = {

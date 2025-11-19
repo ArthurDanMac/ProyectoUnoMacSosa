@@ -132,12 +132,13 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             println("estado ${task.status}")
             try {
                 val newTask = RetrofitClient.api.updateTask(token,idUpVM, task)
-                //listaTasks.value = listaTasks.value + newTask
             } catch (e: Exception) {
                 e.printStackTrace()
             }
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
         }
     }
+
+
 
 }
