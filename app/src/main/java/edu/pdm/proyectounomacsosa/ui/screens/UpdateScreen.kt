@@ -58,7 +58,7 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
     var showDatePicker by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
 
-    var idUpd by remember { mutableStateOf(0) }
+    var idUpd=viewModel.idUpVM
 
     LaunchedEffect(Unit) { viewModel.loadTasks() }
     LaunchedEffect(idUpd) {
