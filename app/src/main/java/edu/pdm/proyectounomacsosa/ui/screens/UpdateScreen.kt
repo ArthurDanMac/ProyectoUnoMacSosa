@@ -58,13 +58,17 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
     var showDatePicker by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
 
-    var idUpd=viewModel.idUpVM
+    val idUpd=viewModel.idUpVM
 
     LaunchedEffect(Unit) { viewModel.loadTasks() }
     LaunchedEffect(idUpd) {
         taskName=tareas[idUpd-1].name
         dueDate=tareas[idUpd-1].plannedD
         status=tareas[idUpd-1].status
+        println("Entra a update screen por 1ra vez")
+        println("nombre ${taskName}")
+        println("fecha ${dueDate}")
+        println("estado ${status}")
     }
 
 
@@ -73,8 +77,9 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
             TopAppBar(
                 title = { Text("Update Task") },
                 actions = {
-                    TopRightMenu(navController, "Add Task")
-                }            )
+                    TopRightMenu(navController, "Update Task")
+                }
+            )
         }
     ) { padding ->
         Column(
@@ -151,16 +156,17 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
             Button(
                 onClick = {
                     if (taskName.isNotBlank() && dueDate.isNotBlank()) {
+
+                        println("Entra a update task antes de llamar el VM")
+                        println("nombre ${taskName}")
+                        println("fecha ${dueDate}")
+                        println("estado ${status}")
                         val TaskUPD = Task(
                             name = taskName,
                             plannedD = dueDate,
-                            status = status// defaulting new tasks to incomplete
+                            status = status
                         )
                         viewModel.updateTask(TaskUPD)
-
-                        taskName = ""
-                        dueDate = ""
-                        status=0
                         navController.navigate("seeTasks")
                     }
                 },
@@ -173,7 +179,7 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
 
 
             ) {
-                Text("Add Task")
+                Text("Update Task")
             }
 
 
