@@ -2,6 +2,7 @@ package edu.pdm.proyectounomacsosa.ui.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -72,19 +73,21 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                     headlineContent = { Text(tarea.name) },
                     trailingContent = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(tarea.plannedD, fontSize = 16.sp)                       // due date
-                            Spacer(modifier = Modifier.width(8.dp))    // small space
-                            Text(
-                                "($daysLeft days left)",
-                                fontSize = 14.sp,
-                                color = Color(0xFF808080)
-                            )
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text(tarea.plannedD, fontSize = 16.sp) // Fecha
+                                Text(
+                                    "($daysLeft days left)",
+                                    fontSize = 14.sp,
+                                    color = Color(0xFF808080)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
                             val estado = remember { mutableStateOf(tarea.status == 1) }
                             Checkbox(
                                 checked = estado.value,
                                 onCheckedChange = { checked ->
                                     estado.value = checked
-                                    viewModel.idUpVM=tarea.id
+                                    viewModel.idUpVM = tarea.id
                                     val taskState = Task(
                                         name = tarea.name,
                                         plannedD = tarea.plannedD,
@@ -95,18 +98,18 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                             )
                             Button(
                                 onClick = {
-                                    viewModel.idUpVM=tarea.id
+                                    viewModel.idUpVM = tarea.id
                                     navController.navigate("update")
                                 }
-                            ) { Text("Edit")}
+                            ) { Text("Edit") }
                         }
                     }
                 )
+
             }
         }
     }
 
 
 }
-
 
