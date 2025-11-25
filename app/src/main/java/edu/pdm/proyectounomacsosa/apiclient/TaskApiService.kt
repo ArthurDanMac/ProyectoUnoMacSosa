@@ -6,34 +6,39 @@ import retrofit2.http.*
 
 interface TaskApiService {
 
-    @GET(".")
+    @GET("/tasks")
     suspend fun getTasks(
         @Header("Authorization") token: String
     ): List<Task>
 
-    @GET("{id}")
+    @GET("/tasks/{id}")
     suspend fun getTaskById(
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Task
 
-    @POST(".")
+    @POST("/tasks")
     suspend fun createTask(
         @Header("Authorization") token: String,
         @Body task: Task
     ): Task
 
-    @PUT("{id}")
+    @PUT("/tasks/{id}")
     suspend fun updateTask(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
         @Body task: Task
     )
 
-    @DELETE("{id}")
+    @DELETE("/tasks/{id}")
     suspend fun deleteTask(
         @Header("Authorization") token: String,
         @Path("id") id: Int
+    )
+
+    @POST("/auth/login")
+    suspend fun login(
+        @Body user: User
     )
 
 

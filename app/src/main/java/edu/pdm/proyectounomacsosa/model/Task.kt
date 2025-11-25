@@ -1,13 +1,15 @@
 package edu.pdm.proyectounomacsosa.model
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName="task") //nombre de tabla
 
 data class Task(
-@PrimaryKey(autoGenerate = true) val id: Int=0,
+    @PrimaryKey(autoGenerate = true) val id: Int=0,
     val name: String,
     val plannedD: String,
-    val status: Int
+    val status: Int,
+    @param:ForeignKey val idUser:Int
 )
