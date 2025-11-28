@@ -139,7 +139,8 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
         }
     }
 
-    fun login(loginUser: User) {
+    fun login(loginUser: User):Boolean {
+        var tokenExiste=false
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             println("Entra a login vm")
@@ -152,6 +153,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
                 val tokenLog = RetrofitClient.api.login(loginUser)
                 token = tokenLog.token
                 println("Token: $token")
+                tokenExiste=true
             } catch (e: Exception) {
                 println("No se pudo :c")
                 e.printStackTrace()
@@ -159,5 +161,6 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
         }
+        return tokenExiste
     }
 }

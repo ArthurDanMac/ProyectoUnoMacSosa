@@ -87,11 +87,13 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
                             password = password,
                             email = email
                         )
-                        viewModel.login(loginUser)
-                        if(viewModel.token.isNotBlank()) {
-                            println("Token: ${viewModel.token}")
+                        val tokenExiste=viewModel.login(loginUser)
+                        if(tokenExiste) {
+                            println("Token en el LoginScreen: ${viewModel.token}")
                             navController.navigate("seeTasks")
                         }else{
+                            println("No se pudo iniciar sesion porque no hay token")
+                            println("Token: ${viewModel.token}")
                             showErrorDialog = true
                         }
                     }
