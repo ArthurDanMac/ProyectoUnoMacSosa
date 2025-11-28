@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
         ).build()
         val repo = TaskRepository(db.task_dao())
         val viewModel = TaskViewModel(repo)
-        //viewModel.login("root","password")
         viewModel.resolveDomain()
         setContent {
             // Use your custom dark theme

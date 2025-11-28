@@ -6,16 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.pdm.proyectounomacsosa.apiclient.RetrofitClient
-import edu.pdm.proyectounomacsosa.apiclient.TaskApiService
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.model.TaskRepository
+import edu.pdm.proyectounomacsosa.model.User
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.InetAddress
 import kotlin.collections.plus
 
@@ -34,7 +32,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
-    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjMwNTE1MTYsImV4cCI6MTc5NDYwOTExNn0.y5q1uYHElp6-kMHNnMSRXaew1qPuvyvKmAJvZrYV3k0"
+    var token = ""//"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjMwNTE1MTYsImV4cCI6MTc5NDYwOTExNn0.y5q1uYHElp6-kMHNnMSRXaew1qPuvyvKmAJvZrYV3k0"
 
 
     fun loadTasks() {
@@ -58,7 +56,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     fun findTaskById(ID: Int) {
         viewModelScope.launch {
             //taskUnica.value = repository.getById(ID)
-            println("Entra a load tasks")
+            println("Entra a find by id")
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             try {
                 println("Entra al try")
@@ -111,7 +109,9 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
         private set
 
     fun resolveDomain() {
-        val domain="https://proyecto-uno-mac-sosa.vercel.app/api/tasks"
+        println("Entra a resolve domain")
+        val domain="https://api-android-eight.vercel.app/"
+        println("Domain: $domain")
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val ip = InetAddress.getByName(domain).hostAddress
@@ -135,6 +135,28 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
+        }
+    }
+
+    fun login(loginUser: User) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+            println("Entra a login vm")
+            println("nombre ${loginUser.username}")
+            println("psswd ${loginUser.password}")
+            println("email ${loginUser.email}")
+
+            try {
+                println("Entra al try del login")
+                val tokenLog = RetrofitClient.api.login(loginUser)
+                token = tokenLog.token
+                println("Token: $token")
+            } catch (e: Exception) {
+                println("No se pudo :c")
+                e.printStackTrace()
+            }
+
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
         }
     }

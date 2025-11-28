@@ -3,7 +3,7 @@ package edu.pdm.proyectounomacsosa.apiclient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
-    private const val BASE_URL = "https://proyecto-uno-mac-sosa.vercel.app/api/"
+    private const val BASE_URL = "https://api-android-eight.vercel.app/"
 
     val api: TaskApiService by lazy {
         Retrofit.Builder()

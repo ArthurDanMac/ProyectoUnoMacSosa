@@ -164,7 +164,9 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
                         val TaskUPD = Task(
                             name = taskName,
                             plannedD = dueDate,
-                            status = status
+                            status = status,
+                            id =2,
+                            idUser = 2
                         )
                         viewModel.updateTask(TaskUPD)
                         navController.navigate("seeTasks")

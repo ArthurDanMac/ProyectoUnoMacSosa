@@ -91,7 +91,9 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                                     val taskState = Task(
                                         name = tarea.name,
                                         plannedD = tarea.plannedD,
-                                        status = if (checked) 1 else 0
+                                        status = if (checked) 1 else 0,
+                                        id = TODO(),
+                                        idUser = TODO()
                                     )
                                     viewModel.updateTask(taskState)
                                 }

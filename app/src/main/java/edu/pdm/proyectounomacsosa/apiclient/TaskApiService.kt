@@ -1,6 +1,7 @@
 package edu.pdm.proyectounomacsosa.apiclient
 
 import edu.pdm.proyectounomacsosa.model.Task
+import edu.pdm.proyectounomacsosa.model.User
 import retrofit2.http.*
 
 
@@ -36,10 +37,15 @@ interface TaskApiService {
         @Path("id") id: Int
     )
 
-    @POST("/auth/login")
-    suspend fun login(
-        @Body user: User
+
+    data class LoginRequest(
+        val token: String
     )
+
+    @POST("/api/auth/login")
+    suspend fun login(
+        @Body u: User
+    ): LoginRequest
 
 
 }
