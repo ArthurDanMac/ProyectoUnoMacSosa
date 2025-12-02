@@ -1,5 +1,6 @@
 package edu.pdm.proyectounomacsosa.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -81,6 +82,7 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
             Spacer(modifier = Modifier.height(50.dp)) // pushes button down
             Button(
                 onClick = {
+                    Toast.makeText(context,"Try1",Toast.LENGTH_SHORT)
                     if (username.isNotBlank() && password.isNotBlank() && email.isNotBlank()) {
                         val loginUser = User(
                             username = username,
