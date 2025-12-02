@@ -7,11 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
-import edu.pdm.proyectounomacsosa.model.AppDatabase
-import edu.pdm.proyectounomacsosa.model.TaskRepository
+import edu.pdm.proyectounomacsosa.data.local.AppDatabase
+import edu.pdm.proyectounomacsosa.data.remote.apiclient.RetrofitClient
+import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
-import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -25,9 +26,15 @@ class MainActivity : ComponentActivity() {
             AppDatabase::class.java,
             "tasks.db"
         ).build()
-        val repo = TaskRepository(db.task_dao())
+
+        val repo = TaskRepository(
+            dao = db.task_dao(),
+            api = RetrofitClient,
+            prefs = _root_ide_package_.edu.pdm.proyectounomacsosa.util.SyncPrefs()
+        )
+
         val viewModel = TaskViewModel(repo)
-        viewModel.resolveDomain()
+
         setContent {
             // Use your custom dark theme
             ProyectoUnoMacSosaTheme(darkTheme = true) {

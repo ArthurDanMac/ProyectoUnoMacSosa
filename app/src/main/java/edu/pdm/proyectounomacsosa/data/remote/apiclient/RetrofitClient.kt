@@ -1,4 +1,4 @@
-package edu.pdm.proyectounomacsosa.apiclient
+package edu.pdm.proyectounomacsosa.data.remote.apiclient
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -7,7 +7,7 @@ object RetrofitClient {
 
     val api: TaskApiService by lazy {
         Retrofit.Builder()
-            .baseUrl(edu.pdm.proyectounomacsosa.apiclient.RetrofitClient.BASE_URL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TaskApiService::class.java)

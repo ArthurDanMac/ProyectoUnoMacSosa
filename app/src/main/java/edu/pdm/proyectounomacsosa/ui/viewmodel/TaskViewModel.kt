@@ -1,13 +1,13 @@
-package edu.pdm.proyectounomacsosa.viewmodel
+package edu.pdm.proyectounomacsosa.ui.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import edu.pdm.proyectounomacsosa.apiclient.RetrofitClient
+import edu.pdm.proyectounomacsosa.data.remote.apiclient.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
-import edu.pdm.proyectounomacsosa.model.TaskRepository
+import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,8 +41,8 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
                 try {
                     println("Entra al try")
-                    val result2 = RetrofitClient.api.getTasks(token)
-                    listaTasks.value = result2
+                    val result = RetrofitClient.api.getTasks(token)
+                    listaTasks.value = result
                 } catch (e: Exception) {
                     e.printStackTrace()
                     println("Error: $e")

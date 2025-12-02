@@ -1,11 +1,11 @@
-package edu.pdm.proyectounomacsosa.apiclient
+package edu.pdm.proyectounomacsosa.data.remote.apiclient
 
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.model.User
 import retrofit2.http.*
 
 
-interface TaskApiService {
+interface TaskApiService: Annotation{
 
     @GET("/tasks")
     suspend fun getTasks(
