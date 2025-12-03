@@ -32,7 +32,12 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
-    var token = ""//"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjMwNTE1MTYsImV4cCI6MTc5NDYwOTExNn0.y5q1uYHElp6-kMHNnMSRXaew1qPuvyvKmAJvZrYV3k0"
+    var token =""//"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjMwNTE1MTYsImV4cCI6MTc5NDYwOTExNn0.y5q1uYHElp6-kMHNnMSRXaew1qPuvyvKmAJvZrYV3k0"
+
+//    var listaUsuario = MutableStateFlow<List<User>>(emptyList())//mutableStateOf(listOf<User>())
+//    val usuario: StateFlow<List<User>> get() = listaUsuario
+var listaUsuario = mutableStateOf(listOf<User>())
+    private set
 
 
     fun loadTasks() {
@@ -41,7 +46,13 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
                 try {
                     println("Entra al try")
-                    val result = RetrofitClient.api.getTasks(token)
+                    println("Token: $token")
+                    val userId=listaUsuario.value[0].id
+                    println("User id: $userId")
+                    val result = RetrofitClient.api.getTasks(
+                        token,
+                        user_id = userId ,
+                    )
                     listaTasks.value = result
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -139,28 +150,26 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
         }
     }
 
-    fun login(loginUser: User):Boolean {
-        var tokenExiste=false
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
-            println("Entra a login vm")
-            println("nombre ${loginUser.username}")
-            println("psswd ${loginUser.password}")
-            println("email ${loginUser.email}")
+    suspend fun login(loginUser: User): Boolean {
+        _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+        println("Entra a login vm")
 
-            try {
-                println("Entra al try del login")
-                val tokenLog = RetrofitClient.api.login(loginUser)
-                token = tokenLog.token
-                println("Token: $token")
-                tokenExiste=true
-            } catch (e: Exception) {
-                println("No se pudo :c")
-                e.printStackTrace()
-            }
+        return try {
+            val response = RetrofitClient.api.login(loginUser)
+            token = response.token
+            val userData = response.user
+            listaUsuario.value = listaUsuario.value + userData
+
+            println("Token: $token")
 
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
+            true
+        } catch (e: Exception) {
+            println("No se pudo :c")
+            e.printStackTrace()
+            _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
+            false
         }
-        return tokenExiste
     }
+
 }

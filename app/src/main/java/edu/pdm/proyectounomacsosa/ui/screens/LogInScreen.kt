@@ -18,14 +18,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.User
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +38,8 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var showErrorDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
 
 
@@ -81,23 +87,23 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
             Spacer(modifier = Modifier.height(50.dp)) // pushes button down
             Button(
                 onClick = {
-                    Toast.makeText(context,"Try1",Toast.LENGTH_SHORT)
-                    if (username.isNotBlank() && password.isNotBlank() && email.isNotBlank()) {
+                    coroutineScope.launch {
                         val loginUser = User(
                             username = username,
                             password = password,
                             email = email
                         )
-                        val tokenExiste=viewModel.login(loginUser)
-                        if(tokenExiste) {
-                            println("Token en el LoginScreen: ${viewModel.token}")
+                        val tokenExiste = viewModel.login(loginUser)
+
+                        if (tokenExiste) {
+                            Toast.makeText(context, "Login exitoso", Toast.LENGTH_SHORT).show()
                             navController.navigate("seeTasks")
-                        }else{
-                            println("No se pudo iniciar sesion porque no hay token")
-                            println("Token: ${viewModel.token}")
+                        } else {
+                            Toast.makeText(context, "Error: no se pudo iniciar sesión", Toast.LENGTH_SHORT).show()
                             showErrorDialog = true
                         }
                     }
+
                 },
                 modifier =
                     Modifier.align(Alignment.CenterHorizontally)

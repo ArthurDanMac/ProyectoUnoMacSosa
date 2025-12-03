@@ -1,5 +1,6 @@
 package edu.pdm.proyectounomacsosa.data.remote.apiclient
 
+import edu.pdm.proyectounomacsosa.model.LoginRequest
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.model.User
 import retrofit2.http.*
@@ -7,40 +8,37 @@ import retrofit2.http.*
 
 interface TaskApiService: Annotation{
 
-    @GET("/tasks")
+    @GET("/api/tasks")
     suspend fun getTasks(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Body user_id: Int
     ): List<Task>
 
-    @GET("/tasks/{id}")
+    @GET("/api/tasks/{id}")
     suspend fun getTaskById(
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Task
 
-    @POST("/tasks")
+    @POST("/api/tasks")
     suspend fun createTask(
         @Header("Authorization") token: String,
         @Body task: Task
     ): Task
 
-    @PUT("/tasks/{id}")
+    @PUT("/api/tasks/{id}")
     suspend fun updateTask(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
         @Body task: Task
     )
 
-    @DELETE("/tasks/{id}")
+    @DELETE("/api/tasks/{id}")
     suspend fun deleteTask(
         @Header("Authorization") token: String,
         @Path("id") id: Int
     )
 
-
-    data class LoginRequest(
-        val token: String
-    )
 
     @POST("/api/auth/login")
     suspend fun login(

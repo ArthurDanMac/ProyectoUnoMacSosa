@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.pdm.proyectounomacsosa.model.Task
+import edu.pdm.proyectounomacsosa.model.User
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,8 +91,8 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                                         name = tarea.name,
                                         plannedD = tarea.plannedD,
                                         status = if (checked) 1 else 0,
-                                        id = TODO(),
-                                        idUser = TODO()
+                                        id = tarea.id,
+                                        idUser = tarea.idUser
                                     )
                                     viewModel.updateTask(taskState)
                                 }
