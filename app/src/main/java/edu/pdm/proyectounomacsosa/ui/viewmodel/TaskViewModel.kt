@@ -47,8 +47,12 @@ var listaUsuario = mutableStateOf(listOf<User>())
                 try {
                     println("Entra al try")
                     println("Token: $token")
-                    val userId=listaUsuario.value[0].id
+                    val userId = listaUsuario.value.firstOrNull()?.id
                     println("User id: $userId")
+                    if (userId == null || token.isNullOrEmpty()) {
+                        println("No hay usuario logueado o token inválido")
+                        return@launch
+                    }
                     val result = RetrofitClient.api.getTasks(
                         token,
                         user_id = userId ,
@@ -157,10 +161,12 @@ var listaUsuario = mutableStateOf(listOf<User>())
         return try {
             val response = RetrofitClient.api.login(loginUser)
             token = response.token
-            val userData = response.user
-            listaUsuario.value = listaUsuario.value + userData
-
+            val userData :User = response.user
             println("Token: $token")
+            println("User: $userData")
+            listaUsuario.value = listOf(userData) // solo un usuario activo
+            println("lista usuario: $listaUsuario")
+
 
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
             true

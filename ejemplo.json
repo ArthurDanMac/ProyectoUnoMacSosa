@@ -1,8 +1,0 @@
-
-{
-    "productid":"1",
-    "productname": "Producto 1",
-    "price":"25.00",
-    "parts":[{"element":"1", "unit":"cm"},
-            {"element":"2", "unit":"ft"},]
-}
