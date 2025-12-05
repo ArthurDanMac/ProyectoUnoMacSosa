@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
-import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -147,7 +147,9 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                         val newTask = Task(
                             name = taskName,
                             plannedD = dueDate,
-                            status = 0// defaulting new tasks to incomplete
+                            status = 0,
+                            id = 2,
+                            idUser = 2// defaulting new tasks to incomplete
                         )
                         viewModel.addTask(newTask)
 

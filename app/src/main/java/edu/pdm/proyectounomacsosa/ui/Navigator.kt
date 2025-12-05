@@ -9,14 +9,15 @@ import androidx.navigation.compose.composable
 import edu.pdm.proyectounomacsosa.ui.screens.AddTaskScreen
 import edu.pdm.proyectounomacsosa.ui.screens.DeleteScreen
 import edu.pdm.proyectounomacsosa.ui.screens.ListByIdScreen
+import edu.pdm.proyectounomacsosa.ui.screens.LogInScreen
 import edu.pdm.proyectounomacsosa.ui.screens.TaskListScreen
 import edu.pdm.proyectounomacsosa.ui.screens.UpdateScreen
-import edu.pdm.proyectounomacsosa.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
-    NavHost(navController, startDestination = "seeTasks") {
+    NavHost(navController, startDestination = "login") {
         composable("addTask") {
             AddTaskScreen(
                 viewModel = viewModel,
@@ -52,5 +53,13 @@ fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
                 navController = navController
             )
         }
+        composable("login") {
+            LogInScreen(
+                viewModel = viewModel,
+                onSearch = { /* optional */ },
+                navController = navController
+            )
+        }
     }
 }
+
