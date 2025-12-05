@@ -11,13 +11,14 @@ interface TaskApiService: Annotation{
     @GET("/api/tasks")
     suspend fun getTasks(
         @Header("Authorization") token: String,
-        @Body user_id: Int
+        @Query("user_id") user_id: Int
     ): List<Task>
 
     @GET("/api/tasks/{id}")
     suspend fun getTaskById(
         @Header("Authorization") token: String,
-        @Path("id") id: Int
+        @Path("id") id: Int,
+        @Path("user_id") user_id: Int
     ): Task
 
     @POST("/api/tasks")

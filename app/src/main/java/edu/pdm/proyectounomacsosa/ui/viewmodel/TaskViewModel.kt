@@ -75,7 +75,8 @@ var listaUsuario = mutableStateOf(listOf<User>())
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             try {
                 println("Entra al try")
-                taskUnica.value = RetrofitClient.api.getTaskById(token,ID)
+                val userId = listaUsuario.value.first().id
+                taskUnica.value = RetrofitClient.api.getTaskById(token,ID, userId )
             } catch (e: Exception) {
                 e.printStackTrace()
                 println("Error: $e")
@@ -160,7 +161,7 @@ var listaUsuario = mutableStateOf(listOf<User>())
 
         return try {
             val response = RetrofitClient.api.login(loginUser)
-            token = response.token
+            token = "Bearer ${response.token}"
             val userData :User = response.user
             println("Token: $token")
             println("User: $userData")
