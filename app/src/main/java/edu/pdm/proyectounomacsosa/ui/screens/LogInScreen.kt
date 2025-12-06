@@ -34,15 +34,12 @@ import kotlin.coroutines.coroutineContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
-    var username by remember { mutableStateOf("") }
+    //var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var showErrorDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-
-
-
 
     Scaffold(
         topBar = {
@@ -61,12 +58,12 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
         ) {
             // --- FORM ---
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("E-mail") },
                 modifier = Modifier.fillMaxWidth()
             )
-
+            
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
@@ -75,21 +72,14 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
                 label = { Text("Password") },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("E-mail") },
-                modifier = Modifier.fillMaxWidth()
-            )
 
             Spacer(modifier = Modifier.height(50.dp)) // pushes button down
+
             Button(
                 onClick = {
                     coroutineScope.launch {
                         val loginUser = User(
-                            username = username,
+                            username = "",
                             password = password,
                             email = email
                         )
@@ -114,6 +104,7 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
             ) {
                 Text("Log In")
             }
+
             if (showErrorDialog) { //se pone un alert afuera del bloque del boton porque es composable y el if debe ir afuera, entre bloques de "display"
                 AlertDialog(
                     onDismissRequest = { showErrorDialog = false },

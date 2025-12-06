@@ -22,7 +22,6 @@ import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -36,15 +35,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.pdm.proyectounomacsosa.model.Task
-import edu.pdm.proyectounomacsosa.model.User
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
-    var estadoInt by remember { mutableStateOf(0) }
-
 
     LaunchedEffect(Unit) { viewModel.loadTasks() }
 
@@ -88,11 +84,11 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                                     estado.value = checked
                                     viewModel.idUpVM = tarea.id
                                     val taskState = Task(
+                                        id = tarea.id,
                                         name = tarea.name,
                                         plannedD = tarea.plannedD,
                                         status = if (checked) 1 else 0,
-                                        id = tarea.id,
-                                        idUser = tarea.idUser
+                                        user_id = tarea.user_id
                                     )
                                     viewModel.updateTask(taskState)
                                 }

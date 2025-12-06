@@ -86,8 +86,8 @@ fun DeleteScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
                     .fillMaxWidth(),
                 enabled = selectedIds.isNotEmpty(),
                 onClick = {
-                    selectedIds.forEach { id ->
-                        viewModel.eraseTask(id)
+                    selectedIds.forEach { idTask ->
+                        viewModel.eraseTask(idTask)
                     }
                     selectedIds = emptySet()
                     reloadKey++ // force reload

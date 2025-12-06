@@ -32,14 +32,11 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
 
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
-    var token =""//"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpYXQiOjE3NjMwNTE1MTYsImV4cCI6MTc5NDYwOTExNn0.y5q1uYHElp6-kMHNnMSRXaew1qPuvyvKmAJvZrYV3k0"
-
-//    var listaUsuario = MutableStateFlow<List<User>>(emptyList())//mutableStateOf(listOf<User>())
-//    val usuario: StateFlow<List<User>> get() = listaUsuario
-var listaUsuario = mutableStateOf(listOf<User>())
+    var token ="" // "Bearer ... "
+    var listaUsuario = mutableStateOf(listOf<User>())
     private set
 
-
+    // Load tasks from API
     fun loadTasks() {
         viewModelScope.launch {
             println("Entra a load tasks")
@@ -54,7 +51,7 @@ var listaUsuario = mutableStateOf(listOf<User>())
                         return@launch
                     }
                     val result = RetrofitClient.api.getTasks(
-                        token,
+                        token= token,
                         user_id = userId ,
                     )
                     listaTasks.value = result
@@ -67,7 +64,7 @@ var listaUsuario = mutableStateOf(listOf<User>())
         }
     }
 
-
+    // Load task by ID from API
     fun findTaskById(ID: Int) {
         viewModelScope.launch {
             //taskUnica.value = repository.getById(ID)
@@ -75,9 +72,9 @@ var listaUsuario = mutableStateOf(listOf<User>())
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             try {
                 println("Entra al try")
-                val userId = listaUsuario.value.first().id
-                taskUnica.value = RetrofitClient.api.getTaskById(token,ID, userId )
-            } catch (e: Exception) {
+                taskUnica.value = RetrofitClient.api.getTaskById(token,ID)
+            }
+            catch (e: Exception) {
                 e.printStackTrace()
                 println("Error: $e")
             }
@@ -86,12 +83,14 @@ var listaUsuario = mutableStateOf(listOf<User>())
         }
     }
 
+    // Load task by name from API
     fun findTaskByName(name: String) {
         viewModelScope.launch {
             taskUnica.value = repository.getByName(name)
         }
     }
 
+    // Add task to API
     fun addTask(task: Task) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
@@ -109,36 +108,25 @@ var listaUsuario = mutableStateOf(listOf<User>())
         }
     }
 
+    // Delete task from API
     fun eraseTask(ID: Int){
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+            println("Entra a erase task")
             try {
-                val oldTask = RetrofitClient.api.deleteTask(token,ID)
-            } catch (e: Exception) {
+                println("Entra al try")
+                println("Token: $token")
+                println("ID: $ID")
+                RetrofitClient.api.deleteTask(token,ID)
+            }
+            catch (e: Exception) {
                 e.printStackTrace()
+                println("Error: $e")
             }
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }        }
     }
 
-
-    var resolvedIp by mutableStateOf<String?>(null)
-        private set
-
-    fun resolveDomain() {
-        println("Entra a resolve domain")
-        val domain="https://api-android-eight.vercel.app/"
-        println("Domain: $domain")
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val ip = InetAddress.getByName(domain).hostAddress
-                resolvedIp = ip
-                println( "Resolved IP: $ip")
-            } catch (e: Exception) {
-                resolvedIp = "Error: ${e.message}"
-                println( "Resolution failed: ${e.message}")
-            }
-        }
-    }
+    // Update task from API
     fun updateTask(task: Task) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
@@ -146,15 +134,18 @@ var listaUsuario = mutableStateOf(listOf<User>())
             println("nombre ${task.name}")
             println("fecha ${task.plannedD}")
             println("estado ${task.status}")
+            println("id ${idUpVM}")
             try {
                 RetrofitClient.api.updateTask(token,idUpVM, task)
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 e.printStackTrace()
             }
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
         }
     }
 
+    // Login user
     suspend fun login(loginUser: User): Boolean {
         _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
         println("Entra a login vm")
@@ -167,7 +158,6 @@ var listaUsuario = mutableStateOf(listOf<User>())
             println("User: $userData")
             listaUsuario.value = listOf(userData) // solo un usuario activo
             println("lista usuario: $listaUsuario")
-
 
             _uiState.update { it.copy(isLoading = false, message = "Carga completa") }
             true

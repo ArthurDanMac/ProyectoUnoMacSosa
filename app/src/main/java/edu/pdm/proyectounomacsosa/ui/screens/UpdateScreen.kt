@@ -26,11 +26,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,27 +50,17 @@ import java.util.Calendar
 @Composable
 fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
     val tareas by viewModel.tasks.collectAsState()
+    val idUpd = viewModel.idUpVM
 
-    // Form state
-    var taskName by remember { mutableStateOf("") }
-    var dueDate by remember { mutableStateOf("") }
-    var status by remember { mutableStateOf(0) }
+    // Buscar la tarea por id
+    val tarea = tareas.find { it.id == idUpd }
+
+    // Form state (se inicializa una sola vez con rememberSaveable)
+    var taskName by rememberSaveable { mutableStateOf(tarea?.name ?: "") }
+    var dueDate by rememberSaveable { mutableStateOf(tarea?.plannedD ?: "") }
+    var status by rememberSaveable { mutableStateOf(tarea?.status ?: 0) }
     var showDatePicker by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
-
-    val idUpd=viewModel.idUpVM
-
-    LaunchedEffect(Unit) { viewModel.loadTasks() }
-    LaunchedEffect(idUpd) {
-        taskName=tareas[idUpd-1].name
-        dueDate=tareas[idUpd-1].plannedD
-        status=tareas[idUpd-1].status
-        println("Entra a update screen por 1ra vez")
-        println("nombre ${taskName}")
-        println("fecha ${dueDate}")
-        println("estado ${status}")
-    }
-
 
     Scaffold(
         topBar = {
@@ -132,8 +122,6 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
                         if (selectedDate.isEqual(today) || selectedDate.isAfter(today)) {
                             println("Fecha La fecha es posterior a hoy")
                         }
-
-
                     },
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
@@ -156,17 +144,16 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
             Button(
                 onClick = {
                     if (taskName.isNotBlank() && dueDate.isNotBlank()) {
-
                         println("Entra a update task antes de llamar el VM")
                         println("nombre ${taskName}")
                         println("fecha ${dueDate}")
                         println("estado ${status}")
                         val TaskUPD = Task(
+                            id = idUpd,
                             name = taskName,
                             plannedD = dueDate,
                             status = status,
-                            id =2,
-                            idUser = 2
+                            user_id = viewModel.listaUsuario.value.first().id
                         )
                         viewModel.updateTask(TaskUPD)
                         navController.navigate("seeTasks")
@@ -178,14 +165,9 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
                         .height(50.dp)
                         .fillMaxWidth(0.5f)  // 50% of the column width
                         .height(50.dp)
-
-
             ) {
                 Text("Update Task")
             }
-
-
-
         }
     }
 }

@@ -17,8 +17,7 @@ interface TaskApiService: Annotation{
     @GET("/api/tasks/{id}")
     suspend fun getTaskById(
         @Header("Authorization") token: String,
-        @Path("id") id: Int,
-        @Path("user_id") user_id: Int
+        @Path("id") id: Int
     ): Task
 
     @POST("/api/tasks")
@@ -30,11 +29,11 @@ interface TaskApiService: Annotation{
     @PUT("/api/tasks/{id}")
     suspend fun updateTask(
         @Header("Authorization") token: String,
-        @Path("id") id: Int,
+        @Path("id") idTask: Int,
         @Body task: Task
     )
 
-    @DELETE("/api/tasks/{id}")
+    @DELETE("/api/tasks/{id}") //se escribe el mismo nombre de variables que la api
     suspend fun deleteTask(
         @Header("Authorization") token: String,
         @Path("id") id: Int
