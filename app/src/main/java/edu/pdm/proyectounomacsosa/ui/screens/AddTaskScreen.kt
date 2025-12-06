@@ -49,10 +49,6 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
-    val tareas by viewModel.tasks.collectAsState()
-
-
-
     // Form state
     var taskName by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf("") }
@@ -148,8 +144,7 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                             name = taskName,
                             plannedD = dueDate,
                             status = 0,
-                            id = 2,
-                            idUser = 2// defaulting new tasks to incomplete
+                            user_id = viewModel.listaUsuario.value.first().id // defaulting new tasks to incomplete
                         )
                         viewModel.addTask(newTask)
 
@@ -164,14 +159,9 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                         .height(50.dp)
                         .fillMaxWidth(0.5f)  // 50% of the column width
                         .height(50.dp)
-
-
             ) {
                 Text("Add Task")
             }
-
-
-
         }
     }
 }

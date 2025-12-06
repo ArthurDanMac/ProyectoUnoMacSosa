@@ -20,5 +20,5 @@ data class Task(
     val name: String,
     val plannedD: String,
     val status: Int, // mejor usar Boolean
-    @ColumnInfo(name = "user_id") val idUser: Int // alinear con SQL
+    @ColumnInfo(name = "user_id") val user_id: Int // alinear con SQL
 )
