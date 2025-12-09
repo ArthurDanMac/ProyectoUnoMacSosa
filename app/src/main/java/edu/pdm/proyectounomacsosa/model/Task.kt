@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+
 @Entity(
     tableName = "task",
     foreignKeys = [
@@ -19,6 +20,6 @@ data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val plannedD: String,
-    val status: Int, // mejor usar Boolean
+    val status: Int,
     @ColumnInfo(name = "user_id") val user_id: Int // alinear con SQL
 )

@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import edu.pdm.proyectounomacsosa.di.AppContainer
 
 class TaskSyncWorker(
     context: Context,
