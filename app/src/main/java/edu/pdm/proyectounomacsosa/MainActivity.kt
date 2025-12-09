@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
         val repo = TaskRepository(
             dao = db.task_dao(),
-            api = TaskApiService,
+            api = RetrofitClient.api,  // <-- FIXED
             networkMonitor = NetworkMonitor,
         )
 
