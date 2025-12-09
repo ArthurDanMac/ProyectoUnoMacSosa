@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import edu.pdm.proyectounomacsosa.data.remote.apiclient.RetrofitClient
+import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.model.User

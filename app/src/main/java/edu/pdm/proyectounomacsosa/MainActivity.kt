@@ -8,7 +8,9 @@ import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import edu.pdm.proyectounomacsosa.data.local.AppDatabase
-import edu.pdm.proyectounomacsosa.data.remote.apiclient.RetrofitClient
+import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
+import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
+import edu.pdm.proyectounomacsosa.data.remote.apiclient.TaskApiService
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
@@ -29,8 +31,8 @@ class MainActivity : ComponentActivity() {
 
         val repo = TaskRepository(
             dao = db.task_dao(),
-            api = RetrofitClient,
-            prefs = _root_ide_package_.edu.pdm.proyectounomacsosa.util.SyncPrefs()
+            api = TaskApiService,
+            networkMonitor = NetworkMonitor,
         )
 
         val viewModel = TaskViewModel(repo)

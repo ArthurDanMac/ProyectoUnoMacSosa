@@ -25,4 +25,7 @@ interface TaskDao {
     @Query("DELETE FROM task WHERE id = :id  ")
     suspend fun delete(id: Int): Int // elimina tarea por el id
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(tasks: List<Task>) //Creo que todas las tareas se guardan en la API
+
 }

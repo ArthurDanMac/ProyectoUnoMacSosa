@@ -11,8 +11,3 @@ data class User(
     val password: String,
     val email: String
 )
-
-data class LoginRequest(
-    val token: String,
-    val user: User
-)
