@@ -2,13 +2,14 @@ package edu.pdm.proyectounomacsosa.data.repository
 
 import edu.pdm.proyectounomacsosa.data.local.TaskDao
 import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
+import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.data.remote.apiclient.TaskApiService
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
 import kotlinx.coroutines.flow.first
 
 class TaskRepository (private val dao: TaskDao,
-                      private val api: TaskApiService,
+                      private val api: RetrofitClient,
                       private val networkMonitor: NetworkMonitor
 ){
     suspend fun sync() {
@@ -21,7 +22,7 @@ class TaskRepository (private val dao: TaskDao,
     }
 
     suspend fun pullFromServer() {
-        val remoteTasks = api.getTasks(
+        val remoteTasks = api.api.getTasks(
             token =  "Bearer 123",
             user_id = 1
         ) //interface
@@ -46,7 +47,7 @@ class TaskRepository (private val dao: TaskDao,
 
     suspend fun pushToServer() {
         dao.getAll()?.forEach { task ->
-            api.updateTask(
+            api.api.updateTask(
                 token = "Bearer ",
                 idTask = task.id,
                 task= task.toRemote()

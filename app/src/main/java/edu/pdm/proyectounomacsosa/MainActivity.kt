@@ -16,12 +16,12 @@ import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
 import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
 
+
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-
         // Initialize database and repository
         val db = Room.databaseBuilder(
             applicationContext,
@@ -31,8 +31,8 @@ class MainActivity : ComponentActivity() {
 
         val repo = TaskRepository(
             dao = db.task_dao(),
-            api = TaskApiService,
-            networkMonitor = NetworkMonitor,
+            api = RetrofitClient,
+            networkMonitor = NetworkMonitor(applicationContext),
         )
 
         val viewModel = TaskViewModel(repo)
