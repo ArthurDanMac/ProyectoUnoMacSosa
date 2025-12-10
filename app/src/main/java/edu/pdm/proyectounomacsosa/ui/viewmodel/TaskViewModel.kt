@@ -1,20 +1,16 @@
 package edu.pdm.proyectounomacsosa.ui.viewmodel
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.model.User
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.net.InetAddress
 import kotlin.collections.plus
 
 class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
@@ -50,7 +46,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
                         println("No hay usuario logueado o token inválido")
                         return@launch
                     }
-                    val result = RetrofitClient.api.getTasks(
+                    val result = RetrofitClient.apiTask.getTasks(
                         token= token,
                         user_id = userId ,
                     )
@@ -72,7 +68,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             try {
                 println("Entra al try")
-                taskUnica.value = RetrofitClient.api.getTaskById(token,ID)
+                taskUnica.value = RetrofitClient.apiTask.getTaskById(token,ID)
             }
             catch (e: Exception) {
                 e.printStackTrace()
@@ -99,7 +95,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             println("fecha ${task.plannedD}")
             println("estado ${task.status}")
             try {
-                val newTask = RetrofitClient.api.createTask(token, task)
+                val newTask = RetrofitClient.apiTask.createTask(token, task)
                 listaTasks.value = listaTasks.value + newTask
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -117,7 +113,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
                 println("Entra al try")
                 println("Token: $token")
                 println("ID: $ID")
-                RetrofitClient.api.deleteTask(token,ID)
+                RetrofitClient.apiTask.deleteTask(token,ID)
             }
             catch (e: Exception) {
                 e.printStackTrace()
@@ -136,7 +132,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
             println("estado ${task.status}")
             println("id ${idUpVM}")
             try {
-                RetrofitClient.api.updateTask(token,idUpVM, task)
+                RetrofitClient.apiTask.updateTask(token,idUpVM, task)
             }
             catch (e: Exception) {
                 e.printStackTrace()
@@ -151,7 +147,7 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
         println("Entra a login vm")
 
         return try {
-            val response = RetrofitClient.api.login(loginUser)
+            val response = RetrofitClient.apiTask.login(loginUser)
             token = "Bearer ${response.token}"
             val userData :User = response.user
             println("Token: $token")

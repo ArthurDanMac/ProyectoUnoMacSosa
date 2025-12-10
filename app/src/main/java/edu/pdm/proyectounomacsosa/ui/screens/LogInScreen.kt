@@ -29,7 +29,6 @@ import edu.pdm.proyectounomacsosa.model.User
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +79,7 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
                     coroutineScope.launch {
                         val loginUser = User(
                             username = "",
-                            password = password,
+                            hashedpsswd = password,
                             email = email
                         )
                         val tokenExiste = viewModel.login(loginUser)

@@ -23,6 +23,7 @@ class TaskSyncWorker(
             val db = AppDatabase.getDatabase(ctx)
             val repo = TaskRepository(
                 db.task_dao(),
+                db.user_dao(),
                 RetrofitClient,
                 NetworkMonitor(applicationContext)
             )

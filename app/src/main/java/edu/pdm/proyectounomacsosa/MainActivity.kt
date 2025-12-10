@@ -11,7 +11,6 @@ import edu.pdm.proyectounomacsosa.data.local.AppDatabase
 import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
 import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
-import edu.pdm.proyectounomacsosa.data.worker.TaskSyncWorker
 import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
 import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
@@ -31,8 +30,9 @@ class MainActivity : ComponentActivity() {
         ).build()
 
         val repo = TaskRepository(
-            dao = db.task_dao(),
-            api = RetrofitClient,
+            taskDao = db.task_dao(),
+            db.user_dao(),
+            rfClientApi = RetrofitClient,
             networkMonitor = NetworkMonitor(applicationContext)
         )
         val viewModel = TaskViewModel(repo)

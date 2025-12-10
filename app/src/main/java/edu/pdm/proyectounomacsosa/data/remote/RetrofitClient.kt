@@ -1,6 +1,7 @@
 package edu.pdm.proyectounomacsosa.data.remote
 
 import edu.pdm.proyectounomacsosa.data.remote.apiclient.TaskApiService
+import edu.pdm.proyectounomacsosa.data.remote.apiclient.UserApiService
 import retrofit2.Retrofit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,12 +19,14 @@ object RetrofitClient {
 
     private const val BASE_URL = "https://api-android-eight.vercel.app/"
 
-    val taskApi: Retrofit = Retrofit.Builder()
+    val Api: Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-    val api: TaskApiService = taskApi.create(TaskApiService::class.java)
+    val apiTask: TaskApiService = Api.create(TaskApiService::class.java)
+    val apiUser: UserApiService = Api.create(UserApiService::class.java)
+
 
 
 }

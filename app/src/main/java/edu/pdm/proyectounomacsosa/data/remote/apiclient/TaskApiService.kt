@@ -42,7 +42,6 @@ interface TaskApiService: Annotation{
         @Path("id") id: Int
     )
 
-
     @POST("/api/auth/login")
     suspend fun login(
         @Body u: User

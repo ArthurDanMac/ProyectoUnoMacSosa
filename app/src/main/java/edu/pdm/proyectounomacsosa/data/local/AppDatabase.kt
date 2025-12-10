@@ -10,6 +10,7 @@ import edu.pdm.proyectounomacsosa.model.User
 @Database(entities = [Task::class, User::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun task_dao(): TaskDao
+    abstract fun user_dao(): UserDAO
 
     companion object {
         @Volatile
@@ -21,7 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "tasks"
+                    "bd_room_tasks"
                 ).build()
                 INSTANCE = instance
                 // retorna la instancia
