@@ -10,8 +10,8 @@ import androidx.room.Room
 import edu.pdm.proyectounomacsosa.data.local.AppDatabase
 import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
 import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
-import edu.pdm.proyectounomacsosa.data.remote.apiclient.TaskApiService
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
+import edu.pdm.proyectounomacsosa.data.worker.TaskSyncWorker
 import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
 import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
         // Initialize database and repository
         val db = Room.databaseBuilder(
             applicationContext,
@@ -32,10 +33,10 @@ class MainActivity : ComponentActivity() {
         val repo = TaskRepository(
             dao = db.task_dao(),
             api = RetrofitClient,
-            networkMonitor = NetworkMonitor(applicationContext),
+            networkMonitor = NetworkMonitor(applicationContext)
         )
-
         val viewModel = TaskViewModel(repo)
+
 
         setContent {
             // Use your custom dark theme

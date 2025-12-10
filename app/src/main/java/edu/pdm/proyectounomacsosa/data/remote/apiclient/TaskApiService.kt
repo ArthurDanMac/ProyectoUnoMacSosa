@@ -7,7 +7,10 @@ import retrofit2.http.*
 
 
 interface TaskApiService: Annotation{
-
+    @GET("/api/tasks/all")
+    suspend fun getAllTasks(
+        @Header("Authorization") token: String
+    ): List<Task>
     @GET("/api/tasks")
     suspend fun getTasks(
         @Header("Authorization") token: String,
