@@ -79,7 +79,7 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
                     coroutineScope.launch {
                         val loginUser = User(
                             username = "",
-                            hashedpsswd = password,
+                            password = password,
                             email = email
                         )
                         val tokenExiste = viewModel.login(loginUser)

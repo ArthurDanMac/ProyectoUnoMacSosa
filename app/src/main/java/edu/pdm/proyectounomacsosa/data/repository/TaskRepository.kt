@@ -40,7 +40,7 @@ class TaskRepository (private val taskDao: TaskDao,
                 User(
                     id = remote.id,
                     username = remote.username,
-                    hashedpsswd = remote.hashedpsswd,
+                    password = remote.password,
                     email = remote.email
                 )
             } else {
