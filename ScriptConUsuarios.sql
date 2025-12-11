@@ -1,8 +1,5 @@
 use railway;
 
-drop table if exists users;
-drop table if exists task;
-
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username NVARCHAR(20),

@@ -28,4 +28,10 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(tasks: List<Task>) //Creo que todas las tareas se guardan en la API
 
+
+    @Query("UPDATE task SET name=:name, plannedD=:plannedD," +
+            " status=:status, user_id=:user_id WHERE id=:id")
+    suspend fun updateTask(name: String, plannedD: String, status: Int, user_id: Int, id: Int)
+
+
 }

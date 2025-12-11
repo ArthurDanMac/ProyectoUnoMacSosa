@@ -1,35 +1,68 @@
 package edu.pdm.proyectounomacsosa.data.repository
 
 import edu.pdm.proyectounomacsosa.data.local.TaskDao
+import edu.pdm.proyectounomacsosa.data.local.UserDAO
 import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
-import edu.pdm.proyectounomacsosa.data.remote.apiclient.TaskApiService
+import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.model.User
 import kotlinx.coroutines.flow.first
 
-class TaskRepository (private val dao: TaskDao,
-                      private val api: TaskApiService,
+class TaskRepository (private val taskDao: TaskDao,
+                      private val userDAO: UserDAO,
+                      private val rfClientApi: RetrofitClient,
                       private val networkMonitor: NetworkMonitor
 ){
     suspend fun sync() {
         // Verificar conexión antes de sincronizar
         val online = networkMonitor.isOnline.first()
+        println("Online: $online")
         if (!online) return
 
-        pullFromServer()
+        pullUsersFromServer()
+        pullTasksFromServer()
         pushToServer()
     }
 
-    suspend fun pullFromServer() {
-        val remoteTasks = api.getTasks(
-            token =  "Bearer 123",
-            user_id = 1
+    suspend fun pullUsersFromServer() {
+        val remoteUsers = rfClientApi.apiUser.getAllUsers(
+            token =  "Bearer Admin123"
         ) //interface
-        val localTasks = dao.getAll()?.associateBy { it.id }
+        println("Remote tasks: $remoteUsers")
+
+        val localUsers = userDAO.getAll()?.associateBy { it.id }
+        println("Local tasks: $localUsers")
+
+        val merged = remoteUsers.map { remote ->
+            val local = localUsers?.get(remote.id)
+            if (local == null ){    // || remote.lastUpdated > local.lastUpdated ) {
+                println("Antes de clase Task: $remote")
+                User(
+                    id = remote.id,
+                    username = remote.username,
+                    password = remote.password,
+                    email = remote.email
+                )
+            } else {
+                local
+            }
+        }
+        userDAO.insertAll(merged)
+    }
+
+    suspend fun pullTasksFromServer() {
+        val remoteTasks = rfClientApi.apiTask.getAllTasks(
+            token =  "Bearer Admin123"
+        ) //interface
+        println("Remote tasks: $remoteTasks")
+
+        val localTasks = taskDao.getAll()?.associateBy { it.id }
+        println("Local tasks: $localTasks")
 
         val merged = remoteTasks.map { remote ->
             val local = localTasks?.get(remote.id)
             if (local == null ){    // || remote.lastUpdated > local.lastUpdated ) {
+                println("Antes de clase Task: $remote")
                 Task(
                     id = remote.id,
                     name = remote.name,
@@ -41,13 +74,14 @@ class TaskRepository (private val dao: TaskDao,
                 local
             }
         }
-        dao.insertAll(merged)
+        println("merged: $merged")
+        taskDao.insertAll(merged)
     }
 
     suspend fun pushToServer() {
-        dao.getAll()?.forEach { task ->
-            api.updateTask(
-                token = "Bearer ",
+        taskDao.getAll()?.forEach { task ->
+            rfClientApi.apiTask.updateTask(
+                token = "Bearer Admin123",
                 idTask = task.id,
                 task= task.toRemote()
             )
@@ -57,14 +91,17 @@ class TaskRepository (private val dao: TaskDao,
     private fun Task.toRemote() = Task(
         id, name, plannedD, status, user_id
     )
-    suspend fun getLocalTasks(): List<Task>? = dao.getAll()
+    suspend fun getLocalTasks(): List<Task>? = taskDao.getAll()
 
-    suspend fun addLocalTask(task: Task) = dao.insert(task)
+    suspend fun addLocalTask(task: Task) = taskDao.insert(task)
 
-    suspend fun getById(id: Int) = dao.getById(id) //insertUser(user)
+    suspend fun getById(id: Int) = taskDao.getById(id) //insertUser(user)
+    suspend fun getByName(name:String) = taskDao.getByName(name) //insertUser(user)
 
-    suspend fun getByName(name:String) = dao.getByName(name) //insertUser(user)
+    suspend fun delete(id:Int) = taskDao.delete(id) //insertUser(user)
 
-    suspend fun delete(id:Int) = dao.delete(id) //insertUser(user)
+
+    suspend fun update(task: Task) = taskDao.updateTask(task.name,
+        task.plannedD, task.status, task.user_id, task.id) //
 
 }
