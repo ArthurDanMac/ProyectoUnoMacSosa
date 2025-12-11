@@ -1,25 +1,43 @@
 package edu.pdm.proyectounomacsosa.data.worker
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import edu.pdm.proyectounomacsosa.data.local.AppDatabase
+import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
+import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
+import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
+import kotlinx.coroutines.coroutineScope
+import java.util.concurrent.TimeUnit
 
 class TaskSyncWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
+    private val ctx: Context,
+    workerParams: WorkerParameters
+) : CoroutineWorker(ctx, workerParams) {
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun doWork(): Result {
-        //val repo = AppContainer.get().taskRepository
-        return try {
-           // repo.sync()
+    override suspend fun doWork(): Result = coroutineScope {
+        try {
+            val db = AppDatabase.getDatabase(ctx)
+            val repo = TaskRepository(
+                db.task_dao(),
+                db.user_dao(),
+                RetrofitClient,
+                NetworkMonitor(applicationContext)
+            )
+            val tareas = repo.getLocalTasks()
+            println("Tareas: $tareas")
+            repo.sync()
+
             Result.success()
         } catch (e: Exception) {
+            println("Error: $e")
+            e.printStackTrace()
             Result.retry()
         }
     }
 }
+
 

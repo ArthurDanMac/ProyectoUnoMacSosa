@@ -10,11 +10,11 @@ import androidx.room.Room
 import edu.pdm.proyectounomacsosa.data.local.AppDatabase
 import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
 import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
-import edu.pdm.proyectounomacsosa.data.remote.apiclient.TaskApiService
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
 import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -26,16 +26,20 @@ class MainActivity : ComponentActivity() {
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
-            "tasks.db"
+            "bd_room_tasks"
         ).build()
 
         val repo = TaskRepository(
-            dao = db.task_dao(),
-            api = TaskApiService,
-            networkMonitor = NetworkMonitor,
+            taskDao = db.task_dao(),
+            db.user_dao(),
+            rfClientApi = RetrofitClient,
+            networkMonitor = NetworkMonitor(applicationContext)
+        )
+        val viewModel = TaskViewModel(
+            repo,
+            netMon = NetworkMonitor(applicationContext)
         )
 
-        val viewModel = TaskViewModel(repo)
 
         setContent {
             // Use your custom dark theme
