@@ -15,7 +15,7 @@ class MyApp : Application() {
         scheduleSync(this)
     }
     fun scheduleSync(context: Context) {
-        val work = PeriodicWorkRequestBuilder<TaskSyncWorker>(15, TimeUnit.MINUTES)
+        val work = PeriodicWorkRequestBuilder<TaskSyncWorker>(1, TimeUnit.MINUTES)
             .build()
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(

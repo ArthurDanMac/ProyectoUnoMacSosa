@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
-            "tasks.db"
+            "bd_room_tasks"
         ).build()
 
         val repo = TaskRepository(
@@ -35,7 +35,10 @@ class MainActivity : ComponentActivity() {
             rfClientApi = RetrofitClient,
             networkMonitor = NetworkMonitor(applicationContext)
         )
-        val viewModel = TaskViewModel(repo)
+        val viewModel = TaskViewModel(
+            repo,
+            netMon = NetworkMonitor(applicationContext)
+        )
 
 
         setContent {

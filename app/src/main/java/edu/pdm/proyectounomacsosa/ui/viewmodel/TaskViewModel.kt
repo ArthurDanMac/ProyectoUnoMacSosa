@@ -3,17 +3,22 @@ package edu.pdm.proyectounomacsosa.ui.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
 import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.collections.plus
 
-class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
+class TaskViewModel (
+                    private val repository: TaskRepository,
+                    private val netMon: NetworkMonitor
+                    ) : ViewModel(){
     data class UiState(
         val isLoading: Boolean = false,
         val message: String = "Presiona el botón"
@@ -32,10 +37,27 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     var listaUsuario = mutableStateOf(listOf<User>())
     private set
 
+    suspend fun Online (void: String): Boolean {
+        var online=false
+        try {
+            online = netMon.isOnline.first()
+            println("Online en funcion $void : $online")
+        } catch (e: Exception) {
+            println("No hay conexión")
+        }
+        return online
+    }
+
+
     // Load tasks from API
     fun loadTasks() {
         viewModelScope.launch {
             println("Entra a load tasks")
+            if( !Online("LOAD TASKS") ){
+                println("No hay conexión se muestran las locales")
+                repository.getLocalTasks()
+                return@launch
+            }
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
                 try {
                     println("Entra al try")
@@ -63,8 +85,14 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     // Load task by ID from API
     fun findTaskById(ID: Int) {
         viewModelScope.launch {
-            //taskUnica.value = repository.getById(ID)
             println("Entra a find by id")
+
+            if( !Online("FIND BY ID") ){
+                println("No hay conexión se muestra la local")
+                taskUnica.value = repository.getById(ID)
+                return@launch
+            }
+
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             try {
                 println("Entra al try")
@@ -89,8 +117,17 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     // Add task to API
     fun addTask(task: Task) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             println("Entra a add task")
+
+            if( !Online("ADD TASKS") ){
+                println("No hay conexión se muestra la local")
+                repository.addLocalTask(task)
+                loadTasks()
+                return@launch
+            }
+
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+
             println("nombre ${task.name}")
             println("fecha ${task.plannedD}")
             println("estado ${task.status}")
@@ -107,8 +144,16 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     // Delete task from API
     fun eraseTask(ID: Int){
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             println("Entra a erase task")
+
+            if( !Online("ERASE TASK") ){
+                println("No hay conexión se borra local")
+                repository.delete(ID)
+                return@launch
+            }
+
+            _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
+
             try {
                 println("Entra al try")
                 println("Token: $token")
@@ -125,6 +170,13 @@ class TaskViewModel (private val repository: TaskRepository) : ViewModel(){
     // Update task from API
     fun updateTask(task: Task) {
         viewModelScope.launch {
+
+            if( !Online("UPDATE TASKS") ){
+                println("No hay conexión se actualiza la local")
+                repository.update(task)
+                return@launch
+            }
+
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             println("Entra a update task")
             println("nombre ${task.name}")
