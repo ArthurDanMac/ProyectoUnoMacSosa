@@ -95,7 +95,7 @@ class TaskRepository (private val taskDao: TaskDao,
 
     suspend fun addLocalTask(task: Task) = taskDao.insert(task)
 
-    suspend fun getById(id: Int) = taskDao.getById(id) //insertUser(user)
+    //suspend fun getById(id: Int) = taskDao.getById(id) //insertUser(user)
     suspend fun getByName(name:String) = taskDao.getByName(name) //insertUser(user)
 
     suspend fun delete(id:Int) = taskDao.delete(id) //insertUser(user)

@@ -27,12 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.User
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.LocalViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
+fun LogInScreen(viewModelRemoto: RemoteViewModel, viewModelLocal: LocalViewModel, onSearch: () -> Unit, navController: NavHostController) {
     //var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -82,6 +83,8 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
                             password = password,
                             email = email
                         )
+                        /*
+                        //FUNCION LOGIN PARA USO DIRECTO DE API
                         val tokenExiste = viewModel.login(loginUser)
 
                         if (tokenExiste) {
@@ -90,6 +93,18 @@ fun LogInScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: N
                         } else {
                             Toast.makeText(context, "Error: no se pudo iniciar sesión", Toast.LENGTH_SHORT).show()
                             showErrorDialog = true
+                        }
+                        */
+                        val userExiste=viewModelLocal.loginLocal(loginUser)
+                        if (userExiste) {
+                            Toast.makeText(context, "Login exitoso", Toast.LENGTH_SHORT).show()
+                            navController.navigate("seeTasks")
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Error: no se pudo iniciar sesión",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
 

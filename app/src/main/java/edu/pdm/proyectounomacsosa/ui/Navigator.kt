@@ -12,50 +12,52 @@ import edu.pdm.proyectounomacsosa.ui.screens.ListByIdScreen
 import edu.pdm.proyectounomacsosa.ui.screens.LogInScreen
 import edu.pdm.proyectounomacsosa.ui.screens.TaskListScreen
 import edu.pdm.proyectounomacsosa.ui.screens.UpdateScreen
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.LocalViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Navigator(viewModel: TaskViewModel, navController: NavHostController) {
+fun Navigator(viewModelR: RemoteViewModel, viewModelL: LocalViewModel,navController: NavHostController) {
     NavHost(navController, startDestination = "login") {
         composable("addTask") {
             AddTaskScreen(
-                viewModel = viewModel,
+                viewModel = viewModelR,
                 onSearch = { /* optional */ },
                 navController = navController
             )
         }
         composable("seeTasks") {
             TaskListScreen(
-                viewModel = viewModel,
+                viewModel = viewModelR,
                 onSearch = { /* optional */ },
                 navController = navController
             )
         }
         composable("listById") {
             ListByIdScreen(
-                viewModel = viewModel,
+                viewModel = viewModelR,
                 onSearch = { /* optional */ },
                 navController = navController
             )
         }
         composable("delete") {
             DeleteScreen(
-                viewModel = viewModel,
+                viewModel = viewModelR,
                 onSearch = { /* optional */ },
                 navController = navController
             )
         }
         composable("update") {
             UpdateScreen(
-                viewModel = viewModel,
+                viewModel = viewModelR,
                 onSearch = { /* optional */ },
                 navController = navController
             )
         }
         composable("login") {
             LogInScreen(
-                viewModel = viewModel,
+                viewModelRemoto = viewModelR,
+                viewModelLocal = viewModelL,
                 onSearch = { /* optional */ },
                 navController = navController
             )

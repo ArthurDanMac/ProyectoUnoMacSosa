@@ -3,22 +3,17 @@ package edu.pdm.proyectounomacsosa.ui.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import edu.pdm.proyectounomacsosa.data.network.NetworkMonitor
 import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.collections.plus
 
-class TaskViewModel (
-                    private val repository: TaskRepository,
-                    private val netMon: NetworkMonitor
-                    ) : ViewModel(){
+class RemoteViewModel (private val repository: TaskRepository ) : ViewModel(){
     data class UiState(
         val isLoading: Boolean = false,
         val message: String = "Presiona el botón"
@@ -37,34 +32,21 @@ class TaskViewModel (
     var listaUsuario = mutableStateOf(listOf<User>())
     private set
 
-    suspend fun Online (void: String): Boolean {
-        var online=false
-        try {
-            online = netMon.isOnline.first()
-            println("Online en funcion $void : $online")
-        } catch (e: Exception) {
-            println("No hay conexión")
-        }
-        return online
-    }
+
 
 
     // Load tasks from API
     fun loadTasks() {
         viewModelScope.launch {
             println("Entra a load tasks")
-            if( !Online("LOAD TASKS") ){
-                println("No hay conexión se muestran las locales")
-                repository.getLocalTasks()
-                return@launch
-            }
+
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
                 try {
                     println("Entra al try")
                     println("Token: $token")
                     val userId = listaUsuario.value.firstOrNull()?.id
                     println("User id: $userId")
-                    if (userId == null || token.isNullOrEmpty()) {
+                    if (userId == null || token.isEmpty()) {
                         println("No hay usuario logueado o token inválido")
                         return@launch
                     }
@@ -86,12 +68,6 @@ class TaskViewModel (
     fun findTaskById(ID: Int) {
         viewModelScope.launch {
             println("Entra a find by id")
-
-            if( !Online("FIND BY ID") ){
-                println("No hay conexión se muestra la local")
-                taskUnica.value = repository.getById(ID)
-                return@launch
-            }
 
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             try {
@@ -119,12 +95,6 @@ class TaskViewModel (
         viewModelScope.launch {
             println("Entra a add task")
 
-            if( !Online("ADD TASKS") ){
-                println("No hay conexión se muestra la local")
-                repository.addLocalTask(task)
-                loadTasks()
-                return@launch
-            }
 
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
 
@@ -146,12 +116,6 @@ class TaskViewModel (
         viewModelScope.launch {
             println("Entra a erase task")
 
-            if( !Online("ERASE TASK") ){
-                println("No hay conexión se borra local")
-                repository.delete(ID)
-                return@launch
-            }
-
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
 
             try {
@@ -170,12 +134,6 @@ class TaskViewModel (
     // Update task from API
     fun updateTask(task: Task) {
         viewModelScope.launch {
-
-            if( !Online("UPDATE TASKS") ){
-                println("No hay conexión se actualiza la local")
-                repository.update(task)
-                return@launch
-            }
 
             _uiState.update { it.copy(isLoading = true, message = "Cargando...") }
             println("Entra a update task")
