@@ -73,13 +73,13 @@ fun TopRightMenu(navController: NavHostController, screenName: String) {
                         expanded = false
                     }
                 )
-                DropdownMenuItem(
+                /*DropdownMenuItem(
                     text = { Text("Task By ID") },
                     onClick = {
                         navController.navigate("listById")
                         expanded = false
                     }
-                )
+                )*/
                 DropdownMenuItem(
                     text = { Text("Delete Task") },
                     onClick = {

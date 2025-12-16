@@ -15,9 +15,9 @@ import androidx.compose.ui.graphics.Color
 
 
 private val DarkColors = darkColorScheme(
-    primary = Color(0xFF1E88E5),       // buttons, checkboxes, etc.
-    onPrimary = Color.White,           // text on buttons
-    secondary = Color(0xFF03DAC5),
+    primary = Color(0xFF6AE51E),       // buttons, checkboxes, etc.
+    onPrimary = Color.Black,           // text on buttons
+    secondary = Color(0xFF3CDA03),
     onSecondary = Color.Black,
     background = Color(0xFF121212),   // screen background
     surface = Color(0xFF1E1E1E),
