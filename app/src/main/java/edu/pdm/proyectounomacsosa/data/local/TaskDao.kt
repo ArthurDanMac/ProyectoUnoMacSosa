@@ -13,10 +13,10 @@ interface TaskDao {
     suspend fun insert(task: Task) //insertar nueva task
 
     @Query("SELECT *FROM task")
-    suspend fun getAll():List<Task>? //da todas las tareas
+    suspend fun getAll():List<Task>? //da todas las tareas para obtenerse desde la api
 
-    @Query("SELECT * FROM task WHERE id = :id ")
-    suspend fun getById(id: Int): Task? //regresa tarea por id
+    @Query("SELECT * FROM task WHERE user_id = :us_id ")
+    suspend fun getByUserId(us_id: Int):List<Task>? //regresa tarea por id
 
     @Query("SELECT * FROM task WHERE name like :name  ")
     suspend fun getByName(name: String): Task? //regresa tarea por nombre
@@ -30,8 +30,8 @@ interface TaskDao {
 
 
     @Query("UPDATE task SET name=:name, plannedD=:plannedD," +
-            " status=:status, user_id=:user_id WHERE id=:id")
-    suspend fun updateTask(name: String, plannedD: String, status: Int, user_id: Int, id: Int)
+            " status=:status, user_id=:userid WHERE id=:id")
+    suspend fun updateTask(name: String, plannedD: String, status: Int, userid: Int, id: Int)
 
 
 }

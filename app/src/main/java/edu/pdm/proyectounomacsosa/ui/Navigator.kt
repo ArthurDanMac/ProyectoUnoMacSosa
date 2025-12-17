@@ -28,7 +28,8 @@ fun Navigator(viewModelR: RemoteViewModel, viewModelL: LocalViewModel,navControl
         }
         composable("seeTasks") {
             TaskListScreen(
-                viewModel = viewModelR,
+                remoteViewModel = viewModelR,
+                localViewModel = viewModelL,
                 onSearch = { /* optional */ },
                 navController = navController
             )
