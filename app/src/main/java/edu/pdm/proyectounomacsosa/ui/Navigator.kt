@@ -21,7 +21,8 @@ fun Navigator(viewModelR: RemoteViewModel, viewModelL: LocalViewModel,navControl
     NavHost(navController, startDestination = "login") {
         composable("addTask") {
             AddTaskScreen(
-                viewModel = viewModelR,
+                remoteViewModel = viewModelR,
+                localViewModel = viewModelL,
                 onSearch = { /* optional */ },
                 navController = navController
             )
@@ -43,14 +44,16 @@ fun Navigator(viewModelR: RemoteViewModel, viewModelL: LocalViewModel,navControl
         }
         composable("delete") {
             DeleteScreen(
-                viewModel = viewModelR,
+                remoteViewModel = viewModelR,
+                localViewModel = viewModelL,
                 onSearch = { /* optional */ },
                 navController = navController
             )
         }
         composable("update") {
             UpdateScreen(
-                viewModel = viewModelR,
+                remoteViewModel = viewModelR,
+                localViewModel = viewModelL,
                 onSearch = { /* optional */ },
                 navController = navController
             )

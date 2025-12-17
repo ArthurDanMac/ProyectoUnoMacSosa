@@ -20,7 +20,7 @@ class LocalViewModel(private val repository: TaskRepository) : ViewModel() {
     val selectedTask: StateFlow<Task?> get() = taskUnica
 
     private var listaUsuariosLocales = MutableStateFlow<List<User>>(emptyList())
-    private var listaUserLocal = MutableStateFlow<List<User>>(emptyList())
+    var listaUserLocal = MutableStateFlow<List<User>>(emptyList())
 
     var l=0
 
