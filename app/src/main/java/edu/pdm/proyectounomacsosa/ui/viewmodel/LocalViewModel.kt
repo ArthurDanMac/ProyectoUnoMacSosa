@@ -1,12 +1,17 @@
 package edu.pdm.proyectounomacsosa.ui.viewmodel
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Operation
+import androidx.work.await
 import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.model.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,8 +24,7 @@ class LocalViewModel(private val repository: TaskRepository) : ViewModel() {
     val taskUnica = MutableStateFlow<Task?>(null)
     val selectedTask: StateFlow<Task?> get() = taskUnica
 
-    var listaUsuarioLocal = mutableStateOf(listOf<User>())
-        private set
+    private val listaUsuarioLocal = MutableStateFlow<List<User>>(emptyList())
 
     fun loadLocalTasks() {
         viewModelScope.launch {
@@ -43,20 +47,26 @@ class LocalViewModel(private val repository: TaskRepository) : ViewModel() {
 
     }
 
-    fun loginLocal(loginUser: User): Boolean {
-        println("Entra a login vm")
+    suspend fun loginLocal(loginUser: User): Boolean {
+        // Usa async para obtener un resultado de la corrutina
+        return viewModelScope.async(Dispatchers.IO) {
+            println("Entra a login local")
+            val listaUsuarioLocal = repository.getAllUsers() ?: emptyList()
+            println("lista usuario local: $listaUsuarioLocal")
 
-        return try {
-            val userData :User =loginUser
-            println("User: $userData")
-            listaUsuarioLocal.value = listOf(userData) // solo un usuario activo
-            println("lista usuario: $listaUsuarioLocal")
-            true
-        } catch (e: Exception) {
-            println("No se pudo :c")
-            e.printStackTrace()
-            false
-        }
+            // Itera sobre la lista y compara con el usuario que intenta hacer login
+            for (user in listaUsuarioLocal) {
+                println("lista usuario: ${user.username} ${user.password} ${user.email}")
+                println("loginUser: ${loginUser.username} ${loginUser.password} ${loginUser.email}")
+                if (user.email == loginUser.email && user.password == loginUser.password) {
+                    return@async true // Devuelve true si las credenciales coinciden
+                }
+            }
+
+            return@async false // Devuelve false si no se encontró el usuario
+        }.await() // Espera el resultado de la corrutina y lo devuelve
     }
+
+
 
 }

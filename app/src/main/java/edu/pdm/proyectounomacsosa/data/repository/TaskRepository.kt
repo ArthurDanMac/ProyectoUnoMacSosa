@@ -104,4 +104,6 @@ class TaskRepository (private val taskDao: TaskDao,
     suspend fun update(task: Task) = taskDao.updateTask(task.name,
         task.plannedD, task.status, task.user_id, task.id) //
 
+    suspend fun getAllUsers(): List<User>? = userDAO.getAll()
+
 }
