@@ -12,8 +12,8 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insert(task: Task) //insertar nueva task
 
-    @Query("SELECT *FROM task")
-    suspend fun getAll():List<Task>? //da todas las tareas para obtenerse desde la api
+    @Query("SELECT * FROM task")
+    suspend fun getAll(): List<Task>? //da todas las tareas para obtenerse desde la api
 
     @Query("SELECT * FROM task WHERE user_id = :us_id ")
     suspend fun getByUserId(us_id: Int):List<Task>? //regresa tarea por id

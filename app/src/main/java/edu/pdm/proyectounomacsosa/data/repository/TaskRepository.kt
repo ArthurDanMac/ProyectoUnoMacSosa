@@ -7,6 +7,7 @@ import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.model.User
 import kotlinx.coroutines.flow.first
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 
 class TaskRepository (private val taskDao: TaskDao,
                       private val userDAO: UserDAO,
@@ -25,18 +26,20 @@ class TaskRepository (private val taskDao: TaskDao,
     }
 
     suspend fun pullUsersFromServer() {
+        println("PULL DE USERS")
+
         val remoteUsers = rfClientApi.apiUser.getAllUsers(
             token =  "Bearer Admin123"
         ) //interface
-        println("Remote tasks: $remoteUsers")
+        println("Remote users: $remoteUsers")
 
         val localUsers = userDAO.getAll()?.associateBy { it.id }
-        println("Local tasks: $localUsers")
+        println("Local users: $localUsers")
 
         val merged = remoteUsers.map { remote ->
             val local = localUsers?.get(remote.id)
             if (local == null ){    // || remote.lastUpdated > local.lastUpdated ) {
-                println("Antes de clase Task: $remote")
+                println("Antes de declarar User: $remote")
                 User(
                     id = remote.id,
                     username = remote.username,
@@ -51,6 +54,8 @@ class TaskRepository (private val taskDao: TaskDao,
     }
 
     suspend fun pullTasksFromServer() {
+        println("PULL DE TASKS")
+
         val remoteTasks = rfClientApi.apiTask.getAllTasks(
             token =  "Bearer Admin123"
         ) //interface
@@ -62,7 +67,7 @@ class TaskRepository (private val taskDao: TaskDao,
         val merged = remoteTasks.map { remote ->
             val local = localTasks?.get(remote.id)
             if (local == null ){    // || remote.lastUpdated > local.lastUpdated ) {
-                println("Antes de clase Task: $remote")
+                println("Antes de declarar Task: $remote")
                 Task(
                     id = remote.id,
                     name = remote.name,
@@ -80,6 +85,8 @@ class TaskRepository (private val taskDao: TaskDao,
 
     suspend fun pushToServer() {
         taskDao.getAll()?.forEach { task ->
+            println("PUSHEAR")
+            println("Task: $task")
             rfClientApi.apiTask.updateTask(
                 token = "Bearer Admin123",
                 idTask = task.id,
