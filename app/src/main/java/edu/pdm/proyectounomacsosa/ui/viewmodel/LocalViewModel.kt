@@ -33,6 +33,8 @@ class LocalViewModel(private val repository: TaskRepository) : ViewModel() {
             val idUser=listaUserLocal.value.first().id
             println("id: $idUser")
             listaTasksLocal.value = repository.getTaskByUserId( id = idUser )!!
+            val prueba=repository.getLocalTasks()
+            println("prueba: $prueba")
 
         }
     }

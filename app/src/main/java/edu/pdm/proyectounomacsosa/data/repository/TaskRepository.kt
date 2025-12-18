@@ -81,10 +81,12 @@ class TaskRepository (private val taskDao: TaskDao,
         }
         println("merged: $merged")
         taskDao.insertAll(merged)
+
+
     }
 
     suspend fun pushToServer() {
-        taskDao.getAll()?.forEach { task ->
+        taskDao.getAll().forEach { task ->
             println("PUSHEAR")
             println("Task: $task")
             rfClientApi.apiTask.updateTask(
@@ -98,7 +100,7 @@ class TaskRepository (private val taskDao: TaskDao,
     private fun Task.toRemote() = Task(
         id, name, plannedD, status, user_id
     )
-    suspend fun getLocalTasks(): List<Task>? = taskDao.getAll()
+    suspend fun getLocalTasks(): List<Task> = taskDao.getAll()
 
     suspend fun addLocalTask(task: Task) = taskDao.insert(task)
 
