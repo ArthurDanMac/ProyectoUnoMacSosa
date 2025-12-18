@@ -9,7 +9,7 @@ import edu.pdm.proyectounomacsosa.model.User
 @Dao
 interface UserDAO {
     @Query("SELECT *FROM users")
-    suspend fun getAll():List<User>? //da todas las tareas
+    suspend fun getAll():List<User>? //da todas las usuarios desde la BD local
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -13,7 +13,8 @@ import edu.pdm.proyectounomacsosa.data.remote.RetrofitClient
 import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import edu.pdm.proyectounomacsosa.ui.Navigator
 import edu.pdm.proyectounomacsosa.ui.theme.ProyectoUnoMacSosaTheme
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.LocalViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -35,17 +36,19 @@ class MainActivity : ComponentActivity() {
             rfClientApi = RetrofitClient,
             networkMonitor = NetworkMonitor(applicationContext)
         )
-        val viewModel = TaskViewModel(
-            repo,
-            netMon = NetworkMonitor(applicationContext)
-        )
+        val remoto = RemoteViewModel(repo )
+        val local = LocalViewModel(repo )
 
 
         setContent {
             // Use your custom dark theme
             ProyectoUnoMacSosaTheme(darkTheme = true) {
                 val navController = rememberNavController()
-                Navigator(viewModel = viewModel, navController = navController)
+                Navigator(
+                    viewModelR = remoto,
+                    viewModelL = local,
+                    navController = navController
+                )
             }
         }
     }

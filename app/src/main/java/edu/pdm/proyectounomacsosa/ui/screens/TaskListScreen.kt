@@ -18,7 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -29,20 +29,22 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.pdm.proyectounomacsosa.model.Task
+import edu.pdm.proyectounomacsosa.ui.viewmodel.LocalViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
-    val tareas by viewModel.tasks.collectAsState()
-
-    LaunchedEffect(Unit) { viewModel.loadTasks() }
+fun TaskListScreen(remoteViewModel: RemoteViewModel, localViewModel: LocalViewModel, onSearch: () -> Unit, navController: NavHostController) {
+    //FUNCION DE  API
+    // val tareas by remoteViewModel.tasks.collectAsState()
+    //LaunchedEffect(Unit) { remoteViewModel.loadTasks() }
+    val tareas by localViewModel.tasks.collectAsState()
+    LaunchedEffect(Unit) { localViewModel.loadLocalTasks() }
 
     Scaffold(
         topBar = {
@@ -82,7 +84,8 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                                 checked = estado.value,
                                 onCheckedChange = { checked ->
                                     estado.value = checked
-                                    viewModel.idUpVM = tarea.id
+                                    //remoteViewModel.idUpVM = tarea.id
+                                    localViewModel.idUpVM=tarea.id
                                     val taskState = Task(
                                         id = tarea.id,
                                         name = tarea.name,
@@ -90,12 +93,14 @@ fun TaskListScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController
                                         status = if (checked) 1 else 0,
                                         user_id = tarea.user_id
                                     )
-                                    viewModel.updateTask(taskState)
+                                    //remoteViewModel.updateTask(taskState)
+                                    localViewModel.updateTask(taskState)
                                 }
                             )
                             Button(
                                 onClick = {
-                                    viewModel.idUpVM = tarea.id
+                                    //remoteViewModel.idUpVM = tarea.id
+                                    localViewModel.idUpVM=tarea.id
                                     navController.navigate("update")
                                 }
                             ) { Text("Edit") }

@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,19 +25,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 import androidx.compose.material3.Checkbox
+import androidx.compose.runtime.collectAsState
+import edu.pdm.proyectounomacsosa.ui.viewmodel.LocalViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeleteScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
-    val tareas by viewModel.tasks.collectAsState()
+fun DeleteScreen(remoteViewModel: RemoteViewModel, localViewModel: LocalViewModel, onSearch: () -> Unit, navController: NavHostController) {
+    //FUNCION DE API
+//    val tareas by viewModel.tasks.collectAsState()
+//    var reloadKey by remember { mutableStateOf(0) }
+    val tareas by localViewModel.tasks.collectAsState()
     var reloadKey by remember { mutableStateOf(0) }
+
 
     // Track multiple selections
     var selectedIds by remember { mutableStateOf(setOf<Int>()) }
 
-    LaunchedEffect(reloadKey) { viewModel.loadTasks() }
+    LaunchedEffect(reloadKey) { localViewModel.loadLocalTasks() }//remoteViewModel.loadTasks() }
 
     Scaffold(
         topBar = {
@@ -87,7 +92,8 @@ fun DeleteScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
                 enabled = selectedIds.isNotEmpty(),
                 onClick = {
                     selectedIds.forEach { idTask ->
-                        viewModel.eraseTask(idTask)
+                        //remoteViewModel.eraseTask(idTask)
+                        localViewModel.eraseLocalTask(idTask)
                     }
                     selectedIds = emptySet()
                     reloadKey++ // force reload

@@ -39,7 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.LocalViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -48,9 +49,14 @@ import java.util.Calendar
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
-    val tareas by viewModel.tasks.collectAsState()
-    val idUpd = viewModel.idUpVM
+fun UpdateScreen(remoteViewModel: RemoteViewModel, localViewModel: LocalViewModel, onSearch: () -> Unit, navController: NavHostController) {
+    //FUNCION PARA API
+//    val tareas by remoteViewModel.tasks.collectAsState()
+//    val idUpd = remoteViewModel.idUpVM
+
+    val tareas by localViewModel.tasks.collectAsState()
+    val idUpd = localViewModel.idUpVM
+
 
     // Buscar la tarea por id
     val tarea = tareas.find { it.id == idUpd }
@@ -153,9 +159,11 @@ fun UpdateScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: 
                             name = taskName,
                             plannedD = dueDate,
                             status = status,
-                            user_id = viewModel.listaUsuario.value.first().id
+                            user_id = localViewModel.listaUserLocal.value.first().id
+                            //remoteViewModel.listaUsuario.value.first().id
                         )
-                        viewModel.updateTask(TaskUPD)
+                        //remoteViewModel.updateTask(TaskUPD)
+                        localViewModel.updateTask(TaskUPD)
                         navController.navigate("seeTasks")
                     }
                 },

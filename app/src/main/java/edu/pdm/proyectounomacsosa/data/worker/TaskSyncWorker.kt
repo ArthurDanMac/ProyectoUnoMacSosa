@@ -13,10 +13,8 @@ import edu.pdm.proyectounomacsosa.data.repository.TaskRepository
 import kotlinx.coroutines.coroutineScope
 import java.util.concurrent.TimeUnit
 
-class TaskSyncWorker(
-    private val ctx: Context,
-    workerParams: WorkerParameters
-) : CoroutineWorker(ctx, workerParams) {
+class TaskSyncWorker(   private val ctx: Context, workerParams: WorkerParameters)
+    : CoroutineWorker(ctx, workerParams) {
 
     override suspend fun doWork(): Result = coroutineScope {
         try {
@@ -28,12 +26,12 @@ class TaskSyncWorker(
                 NetworkMonitor(applicationContext)
             )
             val tareas = repo.getLocalTasks()
-            println("Tareas: $tareas")
+            println("Tareas hechas a aprtir del SyncNetwork: $tareas")
             repo.sync()
 
             Result.success()
         } catch (e: Exception) {
-            println("Error: $e")
+            println("Error por el Sync Network: $e")
             e.printStackTrace()
             Result.retry()
         }

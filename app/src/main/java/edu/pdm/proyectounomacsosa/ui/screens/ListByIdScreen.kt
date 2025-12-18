@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +37,7 @@ import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListByIdScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
+fun ListByIdScreen(viewModel: RemoteViewModel, onSearch: () -> Unit, navController: NavHostController) {
     var taskID by remember { mutableStateOf("") }
     val task = viewModel.selectedTask.collectAsState().value  // observe the current task
 

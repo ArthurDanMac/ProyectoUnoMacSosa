@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import edu.pdm.proyectounomacsosa.model.Task
 import edu.pdm.proyectounomacsosa.ui.components.TopRightMenu
-import edu.pdm.proyectounomacsosa.ui.viewmodel.TaskViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.LocalViewModel
+import edu.pdm.proyectounomacsosa.ui.viewmodel.RemoteViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
@@ -48,14 +48,16 @@ import java.util.Calendar
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController: NavHostController) {
-    // Form state
+fun AddTaskScreen(remoteViewModel: RemoteViewModel, localViewModel: LocalViewModel, onSearch: () -> Unit, navController: NavHostController) {
     var taskName by remember { mutableStateOf("") }
     var dueDate by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) { viewModel.loadTasks() }
+    // FUNCION DE API
+//    LaunchedEffect(Unit) { viewModel.loadTasks() }
+    LaunchedEffect(Unit) { localViewModel.loadLocalTasks() }
+
 
     Scaffold(
         topBar = {
@@ -144,9 +146,10 @@ fun AddTaskScreen(viewModel: TaskViewModel, onSearch: () -> Unit, navController:
                             name = taskName,
                             plannedD = dueDate,
                             status = 0,
-                            user_id = viewModel.listaUsuario.value.first().id // defaulting new tasks to incomplete
+                            user_id = localViewModel.listaUserLocal.value.first().id //viewModel.listaUsuario.value.first().id
                         )
-                        viewModel.addTask(newTask)
+                        //remoteViewModel.addTask(newTask)
+                        localViewModel.addTask(newTask)
 
                         taskName = ""
                         dueDate = ""
